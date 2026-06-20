@@ -21,7 +21,7 @@
   import { getFirestore, doc, setDoc, getDoc, collection,
            getDocs, serverTimestamp, orderBy, query, limit }
                                      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
- 
+
   // ── YOUR FIREBASE CONFIG (paste from Firebase console) ──────
   const firebaseConfig = {
     apiKey:            "AIzaSyDV-e2RWrKOZHH4WvQoUqEKUYSpHIrd_2I",
@@ -32,23 +32,23 @@
     appId:             "1:666869336415:web:560d6a43717a1c7aa8ceea"
   };
   // ────────────────────────────────────────────────────────────
- 
+
   const fbApp = initializeApp(firebaseConfig);
   const auth  = getAuth(fbApp);
   const db    = getFirestore(fbApp);
- 
+
   let userId = null;
   let huntStartTime = null;
- 
+
   // ── Anonymous sign-in (no email/password needed) ─────────────
   signInAnonymously(auth).catch(() => {
     console.warn('Firebase auth failed — falling back to localStorage');
   });
- 
+
   onAuthStateChanged(auth, async user => {
     if (!user) return;
     userId = user.uid;
- 
+
     // Load saved progress from Firestore
     try {
       const snap = await getDoc(doc(db, 'users', userId));
@@ -62,13 +62,13 @@
       }
     } catch(e) { console.warn('Could not load Firestore progress:', e); }
   });
- 
+
   // ── Save a completed stop to Firestore ──────────────────────
   window._saveStopToFirestore = async (stopId, stopName) => {
     if (!userId) return;
     if (!huntStartTime) huntStartTime = new Date();
     const isComplete = window._done.size >= 9; // 9 outdoor stops
- 
+
     try {
       await setDoc(doc(db, 'users', userId), {
         completedStops: [...window._done],
@@ -77,7 +77,7 @@
         huntComplete:   isComplete,
         completedAt:    isComplete ? serverTimestamp() : null,
       }, { merge: true });
- 
+
       // Write leaderboard entry when hunt is complete
       if (isComplete) {
         const elapsed = Math.round((Date.now() - huntStartTime.getTime()) / 1000);
@@ -91,7 +91,7 @@
       }
     } catch(e) { console.warn('Firestore save failed:', e); }
   };
- 
+
   // ── Load leaderboard ────────────────────────────────────────
   window._loadLeaderboard = async () => {
     try {
@@ -104,7 +104,7 @@
       window._renderLeaderboard([], userId);
     }
   };
- 
+
   // ── Admin: load all user stats ───────────────────────────────
   window._loadAdminStats = async () => {
     try {
@@ -124,7 +124,7 @@
   box-sizing: border-box; margin: 0; padding: 0;
   -webkit-tap-highlight-color: transparent;
 }
- 
+
 :root {
   --forest:    #0F1F0F;
   --forest-md: #1A3320;
@@ -147,9 +147,9 @@
   --r-xs:      6px;
   --shadow:    0 2px 20px rgba(15,31,15,0.12);
 }
- 
+
 html { scroll-behavior: smooth; }
- 
+
 body {
   font-family: 'Jost', sans-serif;
   background: var(--forest);
@@ -159,7 +159,7 @@ body {
   color: var(--ink);
   overscroll-behavior: none;
 }
- 
+
 .app {
   width: 100%;
   max-width: 430px;
@@ -170,27 +170,27 @@ body {
   position: relative;
   overflow: hidden;
 }
- 
+
 /* ═══════════════ SCREENS ═══════════════ */
 .screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
 .screen.active { display: flex; }
 .scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 .scroll.padded { padding-bottom: 90px; }
- 
+
 /* ═══════════════ ONBOARDING ═══════════════ */
 #scr-onboard {
   background: var(--forest);
   position: relative;
   overflow: hidden;
 }
- 
+
 .onboard-bg {
   position: absolute; inset: 0;
   background:
     radial-gradient(ellipse 60% 40% at 20% 80%, rgba(36,77,48,0.6) 0%, transparent 60%),
     radial-gradient(ellipse 50% 60% at 80% 20%, rgba(196,146,42,0.15) 0%, transparent 60%);
 }
- 
+
 .onboard-pattern {
   position: absolute; inset: 0; opacity: 0.04;
   background-image: repeating-linear-gradient(
@@ -199,7 +199,7 @@ body {
     90deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px
   );
 }
- 
+
 .onboard-content {
   position: relative; z-index: 1;
   display: flex; flex-direction: column;
@@ -207,7 +207,7 @@ body {
   height: 100%;
   min-height: 100vh;
 }
- 
+
 .onboard-emblem {
   width: 72px; height: 72px;
   border: 2px solid rgba(196,146,42,0.4);
@@ -223,27 +223,27 @@ body {
   border-radius: 50%;
 }
 .onboard-emblem svg { width: 32px; height: 32px; }
- 
+
 .onboard-eyebrow {
   font-size: 10px; font-weight: 600; letter-spacing: 2.5px;
   text-transform: uppercase; color: var(--gold);
   margin-bottom: 16px;
 }
- 
+
 .onboard-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: 46px; line-height: 1.1; font-weight: 600;
   color: var(--cream);
   margin-bottom: 20px;
 }
- 
+
 .onboard-desc {
   font-size: 15px; line-height: 1.75;
   color: rgba(248,244,236,0.65);
   margin-bottom: 40px;
   max-width: 320px;
 }
- 
+
 .onboard-stats {
   display: flex; gap: 28px; margin-bottom: 48px;
 }
@@ -257,7 +257,7 @@ body {
   font-size: 11px; color: rgba(248,244,236,0.45);
   margin-top: 3px; letter-spacing: 0.3px;
 }
- 
+
 .onboard-start {
   width: 100%;
   padding: 18px;
@@ -271,7 +271,7 @@ body {
   transition: background 0.2s, transform 0.1s;
 }
 .onboard-start:active { transform: scale(0.98); background: #D4A030; }
- 
+
 .onboard-learn {
   width: 100%;
   padding: 16px;
@@ -285,13 +285,13 @@ body {
   transition: background 0.2s;
 }
 .onboard-learn:active { background: rgba(248,244,236,0.14); }
- 
+
 .onboard-footer {
   margin-top: auto; padding-top: 32px;
   font-size: 11px; color: rgba(248,244,236,0.3);
   text-align: center; line-height: 1.6;
 }
- 
+
 /* ═══════════════ TOPBAR ═══════════════ */
 .topbar {
   background: var(--forest);
@@ -319,7 +319,7 @@ body {
   white-space: nowrap;
 }
 .back-btn:active { opacity: 0.7; }
- 
+
 /* ═══════════════ PROGRESS STRIP ═══════════════ */
 .prog-strip {
   background: var(--forest-md);
@@ -340,14 +340,14 @@ body {
   border-radius: 99px;
   transition: width 0.8s cubic-bezier(.4,0,.2,1);
 }
- 
+
 /* ═══════════════ HOME LIST ═══════════════ */
 .sec-lbl {
   font-size: 9px; font-weight: 600; letter-spacing: 2px;
   text-transform: uppercase; color: var(--ink-lt);
   padding: 18px 20px 8px;
 }
- 
+
 .stop-card {
   display: flex; align-items: center; gap: 14px;
   padding: 14px 20px;
@@ -359,7 +359,7 @@ body {
 }
 .stop-card:active { background: var(--cream-dk); }
 .stop-card.locked { cursor: default; }
- 
+
 .stop-icon-wrap {
   width: 44px; height: 44px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
@@ -369,7 +369,7 @@ body {
 .si-next   { background: var(--forest); }
 .si-locked { background: var(--cream-dk); }
 .si-gilb   { background: var(--gold-lt); }
- 
+
 .stop-info { flex: 1; min-width: 0; }
 .stop-name {
   font-size: 14px; font-weight: 600; color: var(--ink);
@@ -377,7 +377,7 @@ body {
   line-height: 1.3;
 }
 .stop-sub { font-size: 12px; color: var(--ink-lt); margin-top: 2px; line-height: 1.4; }
- 
+
 .chip {
   font-size: 10px; font-weight: 600;
   padding: 4px 10px; border-radius: 99px; flex-shrink: 0;
@@ -386,7 +386,7 @@ body {
 .ch-done   { background: var(--sage-lt); color: var(--forest-md); }
 .ch-next   { background: var(--forest); color: var(--gold); }
 .ch-locked { background: var(--cream-dk); color: var(--ink-lt); }
- 
+
 /* ═══════════════ DETAIL ═══════════════ */
 .detail-hero {
   background: var(--forest);
@@ -398,7 +398,7 @@ body {
   bottom: -1px; left: 0; right: 0; height: 24px;
   background: var(--cream); border-radius: 24px 24px 0 0;
 }
- 
+
 .hero-zone {
   display: inline-block;
   font-size: 9px; font-weight: 600; letter-spacing: 1.5px;
@@ -412,9 +412,9 @@ body {
   color: var(--cream);
 }
 .hero-addr { font-size: 12px; color: rgba(248,244,236,0.45); margin-top: 7px; }
- 
+
 .d-body { padding: 22px 20px; }
- 
+
 /* GPS card */
 .gps-wrap {
   display: flex; align-items: center; gap: 14px;
@@ -459,7 +459,7 @@ body {
 .gps-wrap.arrived .gps-title   { color: var(--forest); }
 .gps-sub { font-size: 11px; color: var(--ink-lt); margin-top: 2px; line-height: 1.4; }
 .gps-dist { font-size: 12px; font-weight: 600; color: var(--gold); margin-left: auto; flex-shrink: 0; }
- 
+
 /* Riddle */
 .riddle-card {
   background: var(--cream-md);
@@ -479,7 +479,7 @@ body {
   font-style: italic; font-size: 16px; line-height: 1.65;
   color: var(--ink);
 }
- 
+
 /* History */
 .d-lbl {
   font-size: 9px; font-weight: 600; letter-spacing: 1.8px;
@@ -489,7 +489,7 @@ body {
   font-size: 14px; line-height: 1.8; color: var(--ink-mid);
   margin-bottom: 22px;
 }
- 
+
 /* Audio */
 .audio-btn {
   display: flex; align-items: center; gap: 14px;
@@ -502,7 +502,7 @@ body {
 }
 .audio-btn.playing { border-color: var(--gold); }
 .audio-btn:active  { background: var(--cream-dk); }
- 
+
 .play-circle {
   width: 42px; height: 42px; border-radius: 50%;
   background: var(--forest); flex-shrink: 0;
@@ -527,13 +527,13 @@ body {
 .p-bar:nth-child(2) { animation-delay: 0.15s; }
 .p-bar:nth-child(3) { animation-delay: 0.08s; }
 @keyframes barPulse { from{height:7px} to{height:14px} }
- 
+
 .audio-info { flex: 1; min-width: 0; }
 .audio-name { font-size: 13px; font-weight: 600; color: var(--ink); }
 .audio-meta { font-size: 11px; color: var(--ink-lt); margin-top: 2px; }
 .audio-prog-wrap { height: 3px; background: var(--cream-dk); border-radius: 99px; margin-top: 8px; overflow: hidden; }
 .audio-prog-fill { height: 100%; background: var(--gold); border-radius: 99px; width: 0%; transition: width 0.25s linear; }
- 
+
 /* Answer section */
 .answer-header {
   display: flex; justify-content: space-between; align-items: center;
@@ -553,7 +553,7 @@ body {
   border-left: 3px solid var(--gold);
 }
 .hint-panel.show { display: block; }
- 
+
 .answer-input {
   width: 100%; padding: 15px 16px;
   border: 2px solid var(--cream-dk);
@@ -571,7 +571,7 @@ body {
 @keyframes shake {
   0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 60%{transform:translateX(6px)}
 }
- 
+
 .submit-btn {
   width: 100%; padding: 17px;
   background: var(--forest); color: var(--gold);
@@ -583,7 +583,7 @@ body {
 .submit-btn:active { transform: scale(0.98); }
 .submit-btn.ok  { background: var(--sage); color: var(--white); }
 .submit-btn.err { background: var(--rust); color: var(--white); }
- 
+
 .clue-reveal {
   display: none; margin-top: 14px;
   background: rgba(37,77,48,0.08);
@@ -596,7 +596,7 @@ body {
   font-style: italic; font-size: 15px;
   color: var(--forest); line-height: 1.6; font-weight: 600;
 }
- 
+
 .done-state {
   display: none; text-align: center;
   padding: 24px 16px;
@@ -610,14 +610,14 @@ body {
   font-size: 22px; color: var(--forest); font-weight: 600;
 }
 .done-sub { font-size: 13px; color: var(--sage); margin-top: 5px; }
- 
+
 /* ═══════════════ MAP ═══════════════ */
 .map-container {
   height: 270px; flex-shrink: 0;
   background: #C4D8C4; position: relative; overflow: hidden;
 }
 .map-container svg { width: 100%; height: 100%; }
- 
+
 .map-legend {
   background: var(--cream-md);
   padding: 10px 20px;
@@ -627,7 +627,7 @@ body {
 }
 .leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-lt); }
 .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
- 
+
 .map-row {
   display: flex; align-items: center; gap: 14px;
   padding: 12px 20px; border-bottom: 1px solid var(--cream-dk);
@@ -640,7 +640,7 @@ body {
 .map-row-name { font-size: 13px; font-weight: 600; color: var(--ink); flex: 1; }
 .map-row-sub  { font-size: 11px; color: var(--ink-lt); margin-top: 1px; }
 .map-status   { font-size: 11px; font-weight: 600; flex-shrink: 0; }
- 
+
 /* ═══════════════ PROGRESS SCREEN ═══════════════ */
 .ring-section {
   padding: 28px 20px 8px;
@@ -652,7 +652,7 @@ body {
   margin-top: 16px; line-height: 1;
 }
 .ring-sub-lbl { font-size: 13px; color: var(--ink-lt); margin-top: 5px; }
- 
+
 .prog-row-item {
   display: flex; align-items: center; gap: 14px;
   padding: 12px 20px; border-bottom: 1px solid var(--cream-dk);
@@ -665,7 +665,7 @@ body {
 .pn-done   { background: var(--sage-lt); color: var(--forest); }
 .pn-next   { background: var(--forest); color: var(--gold); }
 .pn-locked { background: var(--cream-dk); color: var(--ink-lt); }
- 
+
 /* ═══════════════ ABOUT ═══════════════ */
 .about-hero {
   background: var(--forest);
@@ -682,7 +682,7 @@ body {
   line-height: 1.2; margin-bottom: 10px;
 }
 .about-sub { font-size: 13px; color: rgba(248,244,236,0.5); line-height: 1.6; }
- 
+
 .about-body { padding: 24px 20px; }
 .about-section-title {
   font-family: 'Cormorant Garamond', serif;
@@ -694,7 +694,7 @@ body {
   font-size: 14px; line-height: 1.8; color: var(--ink-mid);
   margin-bottom: 16px;
 }
- 
+
 .museum-card {
   background: var(--cream-md);
   border-radius: var(--r); padding: 18px;
@@ -707,7 +707,7 @@ body {
   margin-bottom: 6px;
 }
 .museum-detail { font-size: 13px; color: var(--ink-lt); line-height: 1.7; }
- 
+
 .scout-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--forest); color: var(--gold);
@@ -715,19 +715,19 @@ body {
   font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
   margin-top: 8px;
 }
- 
+
 .accessibility-note {
   background: var(--cream-md); border-radius: var(--r-sm);
   padding: 14px 16px; margin-top: 20px;
   border-left: 3px solid var(--sage);
   font-size: 13px; color: var(--ink-mid); line-height: 1.6;
 }
- 
+
 .version-line {
   text-align: center; font-size: 11px; color: var(--ink-lt);
   padding: 20px; letter-spacing: 0.3px;
 }
- 
+
 /* ═══════════════ BOTTOM NAV ═══════════════ */
 .bnav {
   background: var(--forest); flex-shrink: 0;
@@ -744,7 +744,7 @@ body {
 }
 .nb.active { color: var(--gold); }
 .nb svg { width: 21px; height: 21px; }
- 
+
 /* ═══════════════ UNLOCK MODAL ═══════════════ */
 .modal-bg {
   display: none; position: fixed; inset: 0;
@@ -762,7 +762,7 @@ body {
   animation: slideUp 0.35s cubic-bezier(.34,1.4,.64,1);
 }
 @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
- 
+
 .sheet-handle {
   width: 40px; height: 4px; border-radius: 99px;
   background: var(--cream-dk); margin: 14px auto 28px;
@@ -782,7 +782,7 @@ body {
   font-family: 'Jost', sans-serif; cursor: pointer;
 }
 .modal-cta:active { opacity: 0.85; }
- 
+
 /* ═══════════════ TOAST ═══════════════ */
 .toast {
   position: fixed; bottom: 100px; left: 50%;
@@ -796,7 +796,7 @@ body {
   overflow: hidden; text-overflow: ellipsis;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
- 
+
 /* ═══════════════ ACCESSIBILITY ═══════════════ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -804,11 +804,50 @@ body {
 :focus-visible {
   outline: 3px solid var(--gold); outline-offset: 3px;
 }
+
+/* ═══════════════ HOME CLUE EXPANDER ═══════════════ */
+.stop-card-wrap { width: 100%; border-bottom: 1px solid var(--cream-dk); }
+.stop-card-wrap .stop-card { border-bottom: none; }
+
+.clue-expander {
+  display: none;
+  background: rgba(37,77,48,0.06);
+  border-left: 4px solid var(--sage);
+  padding: 14px 16px 14px 20px;
+  animation: expandIn 0.2s ease;
+}
+.clue-expander.open { display: block; }
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.clue-eye-sm {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.4px;
+  text-transform: uppercase; color: var(--sage);
+  margin-bottom: 6px;
+}
+.clue-body-sm {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 14px;
+  color: var(--forest); line-height: 1.6; font-weight: 600;
+}
+.clue-toggle {
+  background: none; border: none; cursor: pointer;
+  padding: 0; margin-left: auto; flex-shrink: 0;
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; color: var(--sage);
+  font-family: 'Jost', sans-serif; letter-spacing: 0.3px;
+}
+.clue-toggle svg {
+  width: 14px; height: 14px;
+  transition: transform 0.2s ease;
+}
+.clue-toggle.open svg { transform: rotate(180deg); }
 </style>
 </head>
 <body>
 <div class="app" role="main">
- 
+
 <!-- ════════════ ONBOARDING ════════════ -->
 <div class="screen active" id="scr-onboard" role="region" aria-label="Welcome screen">
   <div class="onboard-bg"></div>
@@ -836,7 +875,7 @@ body {
     </div>
   </div>
 </div>
- 
+
 <!-- ════════════ HOME ════════════ -->
 <div class="screen" id="scr-home" role="region" aria-label="Hunt home">
   <div class="topbar">
@@ -859,7 +898,7 @@ body {
     <button class="nb" id="nb-about" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
 </div>
- 
+
 <!-- ════════════ DETAIL ════════════ -->
 <div class="screen" id="scr-detail" role="region" aria-label="Stop detail">
   <div class="topbar">
@@ -885,17 +924,17 @@ body {
         </div>
         <div class="gps-dist" id="gps-dist" aria-label="Distance to stop"></div>
       </div>
- 
+
       <!-- Riddle -->
       <div class="riddle-card" role="region" aria-label="Riddle">
         <div class="card-eye gold">Riddle — solve it when you arrive</div>
         <div class="riddle-q" id="d-riddle">…</div>
       </div>
- 
+
       <!-- History -->
       <div class="d-lbl">About this site</div>
       <div class="history-text" id="d-history">…</div>
- 
+
       <!-- Audio -->
       <div class="d-lbl">Audio guide</div>
       <button class="audio-btn" id="audio-btn" onclick="toggleAudio()" aria-label="Play audio guide">
@@ -909,7 +948,7 @@ body {
           <div class="audio-prog-wrap"><div class="audio-prog-fill" id="a-prog"></div></div>
         </div>
       </button>
- 
+
       <!-- Answer -->
       <div id="answer-zone">
         <div class="answer-header">
@@ -926,7 +965,7 @@ body {
           <div class="clue-body" id="clue-txt">…</div>
         </div>
       </div>
- 
+
       <!-- Done state -->
       <div class="done-state" id="done-state" role="status">
         <div class="done-check" aria-hidden="true">✓</div>
@@ -936,7 +975,7 @@ body {
     </div>
   </div>
 </div>
- 
+
 <!-- ════════════ MAP ════════════ -->
 <div class="screen" id="scr-map" role="region" aria-label="Route map">
   <div class="topbar">
@@ -1011,7 +1050,7 @@ body {
     <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
 </div>
- 
+
 <!-- ════════════ PROGRESS ════════════ -->
 <div class="screen" id="scr-progress" role="region" aria-label="Your progress">
   <div class="topbar">
@@ -1039,7 +1078,7 @@ body {
     <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
 </div>
- 
+
 <!-- ════════════ ABOUT ════════════ -->
 <div class="screen" id="scr-about" role="region" aria-label="About this project">
   <div class="topbar">
@@ -1057,7 +1096,7 @@ body {
       <p class="about-p">The Arcadia Heritage Hunt is an Eagle Scout Service Project designed to make Arcadia's rich history accessible and engaging for residents, visitors, families, and students of all ages.</p>
       <p class="about-p">Participants visit 10 historic landmarks across the city, listen to narrated audio guides, solve riddles tied to each location's real history, and collect clues that lead them to the next stop — all without needing a tour guide.</p>
       <p class="about-p">The hunt exists in two formats: this digital app, and a printed booklet available at the Gilb Museum for those who prefer a non-digital experience or want a keepsake souvenir.</p>
- 
+
       <div class="about-section-title">Our beneficiary</div>
       <div class="museum-card">
         <div class="museum-name">Gilb Museum of Arcadia Heritage</div>
@@ -1068,21 +1107,21 @@ body {
         </div>
       </div>
       <p class="about-p">The Gilb Museum of Arcadia Heritage has preserved and celebrated the city's story since 2001. This project was created in partnership with the museum to expand their educational outreach and bring Arcadia's history to life in a new, interactive format.</p>
- 
+
       <div class="about-section-title">About the creator</div>
       <p class="about-p">This project was designed and built by Shaunak Sathe as an Eagle Scout Service Project for Boy Scouts of America Troop 2131. It represents the culmination of planning, community partnership, historical research, app development, and volunteer coordination.</p>
       <div><span class="scout-badge">BSA Troop 2131 · Eagle Scout Project</span></div>
       <br>
       <button onclick="goScreen('admin')" style="background:none;border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:10px 16px;font-size:12px;color:var(--ink-lt);font-family:'Jost',sans-serif;cursor:pointer;width:100%;">🔒 Admin dashboard (project creator only)</button>
- 
+
       <div class="about-section-title" style="margin-top:28px">How to use the app</div>
       <p class="about-p">Start at the Gilb Museum, then follow the clues in order. The app uses GPS to confirm you're near each stop before unlocking the riddle. Solve each riddle, submit your answer, and a clue to the next location appears automatically.</p>
       <p class="about-p">All 10 stops are concentrated along Huntington Drive and the adjacent Arboretum area. Zone A stops are all walkable from the Gilb Museum. Zone B (the Arboretum cluster) requires a short drive west on Huntington Drive.</p>
- 
+
       <div class="accessibility-note" role="note">
         <strong>Accessibility:</strong> This app works on any phone browser — no download required. The printed booklet version is available free at the Gilb Museum for visitors who prefer a non-digital experience. The route is largely flat and follows public sidewalks.
       </div>
- 
+
       <div class="version-line">
         Version 1.0 · Arcadia Heritage Hunt<br>
         © 2026 Shaunak Sathe · Troop 2131
@@ -1096,7 +1135,7 @@ body {
     <button class="nb active" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
 </div>
- 
+
 <!-- ════════════ LEADERBOARD ════════════ -->
 <div class="screen" id="scr-leaderboard" role="region" aria-label="Leaderboard">
   <div class="topbar">
@@ -1121,7 +1160,7 @@ body {
     <button class="nb active" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
   </nav>
 </div>
- 
+
 <!-- ════════════ ADMIN ════════════ -->
 <div class="screen" id="scr-admin" role="region" aria-label="Admin dashboard">
   <div class="topbar">
@@ -1156,7 +1195,7 @@ body {
     <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
   </nav>
 </div>
- 
+
 <!-- ════════════ UNLOCK MODAL ════════════ -->
 <div class="modal-bg" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-sheet">
@@ -1167,12 +1206,12 @@ body {
     <button class="modal-cta" onclick="closeModal()">Continue Hunt →</button>
   </div>
 </div>
- 
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
- 
+
 <script>
 'use strict';
- 
+
 /* ═══════════ DATA ═══════════ */
 const STOPS = [
   { id:1, n:'1', name:'Gilb Museum of Arcadia Heritage',
@@ -1257,7 +1296,7 @@ const STOPS = [
     ans:'1909', hint:'Hint: Your very first answer — the year horse racing was banned in California.',
     clue:'🏆 Hunt complete! Show this screen to museum staff to receive your official Arcadia Heritage Hunt completion certificate. Well done!' }
 ];
- 
+
 /* ═══════════ STATE ═══════════ */
 let done     = new Set(JSON.parse(localStorage.getItem('ahh_done') || '[]'));
 let current  = null;
@@ -1266,17 +1305,17 @@ let audioPos = 0;
 let audioOn  = false;
 let watchId  = null;
 let gpsState = 'searching';
- 
+
 // Expose done set to Firebase module
 window._done = done;
- 
+
 // Called by Firebase module after loading cloud progress
 window._refreshAllScreens = () => {
   buildHome();
   buildMap();
   buildProgress();
 };
- 
+
 function saveDone() {
   // Always save locally as fallback
   try { localStorage.setItem('ahh_done', JSON.stringify([...done])); } catch(e){}
@@ -1285,7 +1324,7 @@ function saveDone() {
     window._saveStopToFirestore(current?.id, current?.name);
   }
 }
- 
+
 /* ═══════════ ONBOARDING ═══════════ */
 function startHunt() {
   goScreen('home');
@@ -1294,7 +1333,7 @@ function showAboutFromOnboard() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('scr-about').classList.add('active');
 }
- 
+
 /* ═══════════ NAVIGATION ═══════════ */
 function goScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1316,7 +1355,7 @@ function goScreen(name) {
     document.getElementById('pin-error').textContent = '';
   }
 }
- 
+
 /* ═══════════ HOME ═══════════ */
 function buildHome() {
   const el = document.getElementById('home-list');
@@ -1325,7 +1364,7 @@ function buildHome() {
   const remaining   = STOPS.filter(s => !done.has(s.id));
   const next        = remaining[0];
   const locked      = remaining.slice(1);
- 
+
   if (doneList.length) {
     el.innerHTML += `<div class="sec-lbl" role="heading" aria-level="3">Completed</div>`;
     doneList.forEach(s => el.appendChild(makeCard(s, 'done')));
@@ -1338,14 +1377,16 @@ function buildHome() {
     el.innerHTML += `<div class="sec-lbl" role="heading" aria-level="3">Upcoming</div>`;
     locked.forEach(s => el.appendChild(makeCard(s, 'locked')));
   }
- 
+
   const total = STOPS.length - 1;
   const cnt   = Math.min(done.size, total);
   document.getElementById('h-prog-txt').textContent  = `${cnt} of ${total} stops`;
   document.getElementById('h-prog-fill').style.width = `${(cnt/total)*100}%`;
 }
- 
+
 function makeCard(s, status) {
+  const wrap = document.createElement('div');
+
   const btn = document.createElement('button');
   btn.className = `stop-card${status==='locked'?' locked':''}`;
   btn.setAttribute('role', 'listitem');
@@ -1354,25 +1395,75 @@ function makeCard(s, status) {
   const label  = {done:'Done ✓', next:'Next →', locked:'Locked'}[status];
   const sub    = status==='locked' ? 'Complete previous stop to unlock' : s.addr;
   const icon   = status==='locked' ? '🔒' : s.icon;
-  btn.innerHTML = `
-    <div class="stop-icon-wrap ${iconBg}" aria-hidden="true">${icon}</div>
-    <div class="stop-info">
-      <div class="stop-name">${s.name}</div>
-      <div class="stop-sub">${sub}</div>
-    </div>
-    <span class="chip ${chipCls}" aria-label="${label}">${label}</span>`;
-  btn.setAttribute('aria-label', `${s.name} — ${label}`);
-  if (status !== 'locked') btn.onclick = () => openDetail(s);
-  return btn;
+
+  if (status === 'done') {
+    // Wrap in a container so we can attach the clue panel below
+    wrap.className = 'stop-card-wrap';
+    const expanderId = `clue-exp-${s.id}`;
+    const toggleId   = `clue-tog-${s.id}`;
+
+    btn.innerHTML = `
+      <div class="stop-icon-wrap ${iconBg}" aria-hidden="true">${icon}</div>
+      <div class="stop-info">
+        <div class="stop-name">${s.name}</div>
+        <div class="stop-sub">${sub}</div>
+      </div>
+      <button class="clue-toggle" id="${toggleId}" aria-label="Show clue for ${s.name}"
+        onclick="toggleClue('${expanderId}','${toggleId}',event)">
+        Clue
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>`;
+    btn.setAttribute('aria-label', `${s.name} — ${label}`);
+    btn.onclick = (e) => {
+      // Only open detail if they didn't click the clue toggle
+      if (!e.target.closest('.clue-toggle')) openDetail(s);
+    };
+
+    const expander = document.createElement('div');
+    expander.className = 'clue-expander';
+    expander.id = expanderId;
+    expander.innerHTML = `
+      <div class="clue-eye-sm">Next clue</div>
+      <div class="clue-body-sm">${s.clue}</div>`;
+
+    wrap.appendChild(btn);
+    wrap.appendChild(expander);
+    return wrap;
+
+  } else {
+    // Non-done cards — original behaviour, no wrapper needed
+    btn.innerHTML = `
+      <div class="stop-icon-wrap ${iconBg}" aria-hidden="true">${icon}</div>
+      <div class="stop-info">
+        <div class="stop-name">${s.name}</div>
+        <div class="stop-sub">${sub}</div>
+      </div>
+      <span class="chip ${chipCls}" aria-label="${label}">${label}</span>`;
+    btn.setAttribute('aria-label', `${s.name} — ${label}`);
+    if (status !== 'locked') btn.onclick = () => openDetail(s);
+    return btn;
+  }
 }
- 
+
+function toggleClue(expanderId, toggleId, e) {
+  e.stopPropagation(); // prevent card tap opening detail
+  const exp = document.getElementById(expanderId);
+  const tog = document.getElementById(toggleId);
+  const isOpen = exp.classList.contains('open');
+  exp.classList.toggle('open', !isOpen);
+  tog.classList.toggle('open', !isOpen);
+  tog.setAttribute('aria-label', isOpen ? 'Show clue' : 'Hide clue');
+}
+
 /* ═══════════ DETAIL ═══════════ */
 function openDetail(s) {
   current = s;
   stopAudio();
   resetAudioUI();
   stopGPS();
- 
+
   document.getElementById('d-tb-title').textContent = s.name;
   document.getElementById('d-tb-sub').textContent   = s.zone;
   document.getElementById('d-zone').textContent     = s.zone;
@@ -1390,7 +1481,7 @@ function openDetail(s) {
   document.getElementById('answer-inp').className   = 'answer-input';
   document.getElementById('sub-btn').textContent    = 'Submit answer →';
   document.getElementById('sub-btn').className      = 'submit-btn';
- 
+
   const isDone = done.has(s.id);
   document.getElementById('answer-zone').style.display = isDone ? 'none' : 'block';
   document.getElementById('done-state').classList.toggle('show', isDone);
@@ -1400,13 +1491,13 @@ function openDetail(s) {
       ? 'You\'ve completed the full hunt — well done!'
       : 'Head to the next location';
   }
- 
+
   document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
   document.getElementById('scr-detail').classList.add('active');
- 
+
   startGPS(s);
 }
- 
+
 /* ═══════════ GPS ═══════════ */
 function startGPS(s) {
   setGPS('searching', 'Locating you…', 'Walk to the location to unlock the riddle', '');
@@ -1438,7 +1529,7 @@ function startGPS(s) {
     }
   }, 3000);
 }
- 
+
 function setGPS(state, title, sub, dist) {
   gpsState = state;
   const card = document.getElementById('gps-card');
@@ -1447,11 +1538,11 @@ function setGPS(state, title, sub, dist) {
   document.getElementById('gps-sub').textContent   = sub;
   document.getElementById('gps-dist').textContent  = dist;
 }
- 
+
 function stopGPS() {
   if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
 }
- 
+
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
   const dLat = (lat2-lat1)*Math.PI/180;
@@ -1459,7 +1550,7 @@ function haversine(lat1, lon1, lat2, lon2) {
   const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
- 
+
 /* ═══════════ AUDIO ═══════════ */
 function toggleAudio() {
   if (audioOn) { stopAudio(); return; }
@@ -1487,22 +1578,22 @@ function resetAudioUI() {
 function formatDur(secs) {
   return Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
 }
- 
+
 /* ═══════════ HINT ═══════════ */
 function toggleHint() {
   document.getElementById('hint-panel').classList.toggle('show');
 }
- 
+
 /* ═══════════ ANSWER ═══════════ */
 function checkAnswer() {
   const raw = document.getElementById('answer-inp').value.trim().toLowerCase().replace(/[^a-z0-9\s]/g,'');
   const ans = current.ans.toLowerCase();
   if (!raw) { toast('Please type your answer first'); return; }
- 
+
   const correct = raw === ans || raw.includes(ans) || ans.includes(raw);
   const field   = document.getElementById('answer-inp');
   const btn     = document.getElementById('sub-btn');
- 
+
   if (correct) {
     field.className = 'answer-input ok';
     btn.textContent = '✓ Correct!';
@@ -1510,7 +1601,7 @@ function checkAnswer() {
     document.getElementById('clue-box').classList.add('show');
     done.add(current.id);
     saveDone();
- 
+
     setTimeout(() => {
       const remaining = STOPS.filter(s => !done.has(s.id));
       const isLast    = done.size >= STOPS.length;
@@ -1532,11 +1623,11 @@ function checkAnswer() {
     }, 1800);
   }
 }
- 
+
 document.getElementById('answer-inp').addEventListener('keydown', e => {
   if (e.key === 'Enter') checkAnswer();
 });
- 
+
 /* ═══════════ MODAL ═══════════ */
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
@@ -1544,7 +1635,7 @@ function closeModal() {
   buildProgress();
   goScreen('home');
 }
- 
+
 /* ═══════════ MAP ═══════════ */
 function buildMap() {
   const el = document.getElementById('map-list');
@@ -1570,19 +1661,19 @@ function buildMap() {
     el.appendChild(btn);
   });
 }
- 
+
 /* ═══════════ PROGRESS ═══════════ */
 function buildProgress() {
   const total = STOPS.length - 1;
   const cnt   = Math.min(done.size, total);
   const pct   = Math.round((cnt/total)*100);
   const circ  = 2 * Math.PI * 60;
- 
+
   document.getElementById('prog-sub').textContent   = `${cnt} of ${total} stops completed`;
   document.getElementById('ring-pct').textContent   = pct + '%';
   document.getElementById('ring-lbl').textContent   = `${cnt} of ${total} stops done`;
   document.getElementById('prog-arc').style.strokeDashoffset = circ - (circ * pct / 100);
- 
+
   const el = document.getElementById('prog-list');
   el.innerHTML = '';
   STOPS.forEach(s => {
@@ -1605,7 +1696,7 @@ function buildProgress() {
     el.appendChild(div);
   });
 }
- 
+
 /* ═══════════ TOAST ═══════════ */
 let toastTimer;
 function toast(msg) {
@@ -1615,7 +1706,7 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
- 
+
 /* ═══════════ LEADERBOARD ═══════════ */
 window._renderLeaderboard = (rows, myUserId) => {
   const el = document.getElementById('leaderboard-list');
@@ -1653,11 +1744,11 @@ window._renderLeaderboard = (rows, myUserId) => {
       </div>`;
   }).join('');
 };
- 
+
 /* ═══════════ ADMIN PIN & STATS ═══════════ */
 // Change this PIN to something only you know!
 const ADMIN_PIN = '2131';
- 
+
 function checkAdminPin() {
   const val = document.getElementById('admin-pin').value.trim();
   if (val === ADMIN_PIN) {
@@ -1670,7 +1761,7 @@ function checkAdminPin() {
     document.getElementById('admin-pin').value = '';
   }
 }
- 
+
 window._renderAdminStats = (users) => {
   if (!users) users = [];
   const total     = users.length;
@@ -1680,7 +1771,7 @@ window._renderAdminStats = (users) => {
   users.forEach(u => {
     if (u.completedStops) u.completedStops.forEach(id => { if (stopCounts[id] !== undefined) stopCounts[id]++; });
   });
- 
+
   // Summary cards
   const sumEl = document.getElementById('admin-summary');
   const statCard = (label, value, sub) => `
@@ -1694,7 +1785,7 @@ window._renderAdminStats = (users) => {
     statCard('Completions',    completed, 'full hunts done') +
     statCard('Completion rate', total > 0 ? Math.round((completed/total)*100)+'%' : '—', 'of all users') +
     statCard('In progress',    total - completed, 'started, not done');
- 
+
   // Stop bars
   const barsEl = document.getElementById('admin-stop-bars');
   barsEl.innerHTML = STOPS.map(s => {
@@ -1710,7 +1801,7 @@ window._renderAdminStats = (users) => {
         </div>
       </div>`;
   }).join('');
- 
+
   // Recent completions
   const recEl = document.getElementById('admin-recent');
   const recent = users.filter(u => u.huntComplete).sort((a,b) => {
@@ -1731,7 +1822,7 @@ window._renderAdminStats = (users) => {
     }).join('');
   }
 };
- 
+
 /* ═══════════ INIT ═══════════ */
 buildHome();
 buildMap();
