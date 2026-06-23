@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="Explore Arcadia's history through a self-guided scavenger hunt. Visit 10 historic landmarks, solve riddles, and discover the stories that built this city.">
+<meta name="description" content="Explore Arcadia's history through the Lucky 9 Heritage Hunt — 9 stops, ~4 miles, ~4 hours. Visit 9 historic landmarks, solve riddles, and discover the stories that built this city.">
 <meta name="theme-color" content="#0F1F0F">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F1F0F'/%3E%3Cpath d='M16 6L8 11v10l8 5 8-5V11L16 6z' stroke='%23C4922A' stroke-width='1.5' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M16 6v14M8 11l8 5 8-5' stroke='%23C4922A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F1F0F'/%3E%3Cpath d='M16 6L8 11v10l8 5 8-5V11L16 6z' stroke='%23C4922A' stroke-width='1.5' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M16 6v14M8 11l8 5 8-5' stroke='%23C4922A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
-<title>Arcadia Heritage Hunt</title>
+<title>Arcadia Lucky 9 Heritage Hunt</title>
 <!-- ═══ FIREBASE SDK ═══ -->
 <script type="module">
   // ─────────────────────────────────────────────────────────────
@@ -616,8 +616,8 @@ body {
 
 /* ═══════════════ MAP ═══════════════ */
 .map-container {
-  height: 270px; flex-shrink: 0;
-  background: #C4D8C4; position: relative; overflow: hidden;
+  height: 300px; flex-shrink: 0;
+  background: #006940; position: relative; overflow: hidden;
 }
 .map-container svg { width: 100%; height: 100%; }
 
@@ -863,8 +863,8 @@ body {
         <path d="M16 4v18M6 10l10 6 10-6" stroke="#C4922A" stroke-width="1.5"/>
       </svg>
     </div>
-    <div class="onboard-eyebrow">Arcadia, California</div>
-    <h1 class="onboard-title">Heritage<br>Hunt</h1>
+    <div class="onboard-eyebrow">Arcadia, California · Lucky 9 Heritage Hunt</div>
+    <h1 class="onboard-title">Lucky 9<br>Heritage Hunt</h1>
     <p class="onboard-desc">Explore the historic landmarks that shaped one of Southern California's most storied cities. Solve riddles, uncover stories, earn your place in Arcadia history.</p>
     <div class="onboard-stats" role="list">
       <div class="stat-item" role="listitem"><div class="stat-num">10</div><div class="stat-lbl">Stops</div></div>
@@ -884,7 +884,7 @@ body {
 <div class="screen" id="scr-home" role="region" aria-label="Hunt home">
   <div class="topbar">
     <div>
-      <div class="tb-title">Arcadia Heritage Hunt</div>
+      <div class="tb-title">Arcadia Lucky 9 Heritage Hunt</div>
       <div class="tb-sub">Shaunak Sathe · Troop 2131</div>
     </div>
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="rgba(248,244,236,0.4)" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="rgba(248,244,236,0.4)" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -905,23 +905,23 @@ body {
     <!-- Welcome card -->
     <div style="padding:20px;">
       <div style="background:var(--forest);border-radius:var(--r);padding:24px;margin-bottom:16px;">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--cream);margin-bottom:8px;line-height:1.2;">Welcome to the<br>Arcadia Heritage Hunt</div>
-        <div style="font-size:13px;color:rgba(248,244,236,0.6);line-height:1.7;">Explore 10 historic landmarks across Arcadia, California. Solve riddles, listen to audio guides, and discover the stories that built this city.</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--cream);margin-bottom:8px;line-height:1.2;">Welcome to the<br>Arcadia Lucky 9 Heritage Hunt</div>
+        <div style="font-size:13px;color:rgba(248,244,236,0.6);line-height:1.7;">Explore 9 historic landmarks across Arcadia, California. Solve riddles, listen to audio guides, and discover the stories that built this city.</div>
         <button onclick="goScreen('map')" style="margin-top:16px;width:100%;padding:14px;background:var(--gold);color:var(--forest);border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;letter-spacing:0.4px;">View the map & start →</button>
       </div>
       <!-- Quick info cards -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
         <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
-          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">10</div>
+          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">9</div>
           <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Historic stops</div>
         </div>
         <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
-          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">3.5</div>
-          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Miles total</div>
+          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">~4</div>
+          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Miles walking/driving</div>
         </div>
         <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
           <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">~4</div>
-          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Hours to complete</div>
+          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Hours to play</div>
         </div>
         <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
           <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">Free</div>
@@ -1032,74 +1032,146 @@ body {
 <!-- ════════════ MAP ════════════ -->
 <div class="screen" id="scr-map" role="region" aria-label="Route map">
   <div class="topbar">
-    <div><div class="tb-title">Route Map</div><div class="tb-sub">All 10 stops · Arcadia, CA</div></div>
+    <div><div class="tb-title">Route Map</div><div class="tb-sub">All 9 stops · Arcadia, CA</div></div>
   </div>
   <nav class="bnav" aria-label="Main navigation">
     <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
     <button class="nb active" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
     <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
     <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+    <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
   <div class="map-container" role="img" aria-label="Map of Arcadia showing all 10 scavenger hunt stops">
-    <svg viewBox="0 0 430 270" xmlns="http://www.w3.org/2000/svg">
-      <rect width="430" height="270" fill="#C4D8C4"/>
-      <!-- Water / green fill blocks -->
-      <rect x="0" y="0" width="430" height="270" fill="#C8DDB8" opacity="0.3"/>
-      <!-- Roads -->
-      <rect x="0" y="120" width="430" height="11" fill="#B8C8A8" opacity="0.9"/>
-      <rect x="140" y="0" width="11" height="270" fill="#B8C8A8" opacity="0.9"/>
-      <rect x="285" y="0" width="11" height="270" fill="#B8C8A8" opacity="0.9"/>
-      <!-- Road labels -->
-      <text x="8" y="117" font-size="7.5" fill="#6A8060" font-family="Jost,sans-serif" font-weight="500">Huntington Dr</text>
-      <text x="143" y="18" font-size="7" fill="#6A8060" font-family="Jost,sans-serif" font-weight="500">N Baldwin Ave</text>
-      <text x="288" y="18" font-size="7" fill="#6A8060" font-family="Jost,sans-serif" font-weight="500">S Santa Anita Ave</text>
-      <!-- Walk route (Zone A, dashed gold) -->
-      <polyline points="210,125 255,125 295,125 345,125 395,125" fill="none" stroke="#C4922A" stroke-width="2.5" stroke-dasharray="6,3" opacity="0.8"/>
-      <!-- Drive route (Zone B, dashed forest) -->
-      <polyline points="210,125 151,125 151,85 115,85" fill="none" stroke="#1A3320" stroke-width="2.5" stroke-dasharray="6,3" opacity="0.7"/>
-      <!-- Zone B stops -->
-      <circle cx="100" cy="98" r="11" fill="#254D30" opacity="0.8"/>
-      <text x="100" y="102.5" text-anchor="middle" font-size="8" fill="#C8DFC8" font-weight="700" font-family="Jost,sans-serif">4</text>
-      <circle cx="117" cy="75" r="14" fill="#1A3320"/>
-      <text x="117" y="79.5" text-anchor="middle" font-size="9" fill="#C8DFC8" font-weight="700" font-family="Jost,sans-serif">3</text>
-      <text x="117" y="100" text-anchor="middle" font-size="6.5" fill="#1A3320" font-family="Jost,sans-serif">Arboretum</text>
-      <circle cx="155" cy="75" r="14" fill="#1A3320"/>
-      <text x="155" y="79.5" text-anchor="middle" font-size="9" fill="#C8DFC8" font-weight="700" font-family="Jost,sans-serif">2</text>
-      <text x="155" y="100" text-anchor="middle" font-size="6.5" fill="#1A3320" font-family="Jost,sans-serif">Race Track</text>
-      <!-- Gilb (anchor stop) -->
-      <circle cx="210" cy="125" r="18" fill="#0F1F0F"/>
-      <circle cx="210" cy="125" r="14" fill="#C4922A" opacity="0.2"/>
-      <text x="210" y="130" text-anchor="middle" font-size="10" fill="#C4922A" font-weight="700" font-family="Cormorant Garamond,serif">G</text>
-      <text x="210" y="152" text-anchor="middle" font-size="6.5" fill="#0F1F0F" font-family="Jost,sans-serif">Gilb Museum</text>
-      <!-- Zone A stops -->
-      <circle cx="253" cy="125" r="11" fill="#254D30"/>
-      <text x="253" y="129.5" text-anchor="middle" font-size="8" fill="#C8DFC8" font-weight="700" font-family="Jost,sans-serif">5</text>
-      <circle cx="293" cy="125" r="14" fill="#0F1F0F"/>
-      <text x="293" y="129.5" text-anchor="middle" font-size="9" fill="#C4922A" font-weight="700" font-family="Jost,sans-serif">7</text>
-      <text x="293" y="150" text-anchor="middle" font-size="6.5" fill="#0F1F0F" font-family="Jost,sans-serif">County Park</text>
-      <circle cx="343" cy="125" r="14" fill="#0F1F0F"/>
-      <text x="343" y="129.5" text-anchor="middle" font-size="9" fill="#C4922A" font-weight="700" font-family="Jost,sans-serif">8</text>
-      <text x="343" y="150" text-anchor="middle" font-size="6.5" fill="#0F1F0F" font-family="Jost,sans-serif">Walk of Champs</text>
-      <circle cx="393" cy="125" r="14" fill="#0F1F0F"/>
-      <text x="393" y="129.5" text-anchor="middle" font-size="9" fill="#C4922A" font-weight="700" font-family="Jost,sans-serif">9</text>
-      <text x="393" y="150" text-anchor="middle" font-size="6.5" fill="#0F1F0F" font-family="Jost,sans-serif">Denny's</text>
-      <!-- Compass -->
-      <g transform="translate(402,26)">
-        <circle r="14" fill="white" opacity="0.65"/>
-        <text x="0" y="-3" text-anchor="middle" font-size="8" fill="#0F1F0F" font-weight="700" font-family="Jost,sans-serif">N</text>
-        <line x1="0" y1="1" x2="0" y2="8" stroke="#0F1F0F" stroke-width="1.2" stroke-linecap="round"/>
+    <svg viewBox="0 0 430 290" xmlns="http://www.w3.org/2000/svg">
+      <!-- ── Background: Arcadia green ── -->
+      <rect width="430" height="290" fill="#006940"/>
+
+      <!-- ── Zone shading ── -->
+      <rect x="0" y="0" width="160" height="290" fill="#003060" opacity="0.35"/>
+      <rect x="160" y="0" width="270" height="290" fill="#001830" opacity="0.15"/>
+
+      <!-- ── Zone label pills ── -->
+      <rect x="8" y="8" width="76" height="24" rx="12" fill="#00345B"/>
+      <text x="46" y="24" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="Jost,sans-serif" letter-spacing="0.8">ZONE B</text>
+      <rect x="195" y="8" width="76" height="24" rx="12" fill="white" stroke="#00345B" stroke-width="2.5"/>
+      <text x="233" y="24" text-anchor="middle" font-size="10" fill="#00345B" font-weight="700" font-family="Jost,sans-serif" letter-spacing="0.8">ZONE A</text>
+
+      <!-- ── Roads ── -->
+      <rect x="0" y="136" width="430" height="10" fill="#E8E2CC" opacity="0.95"/>
+      <text x="8" y="132" font-size="7.5" fill="rgba(255,255,255,0.85)" font-family="Jost,sans-serif" font-weight="600">Huntington Dr</text>
+      <rect x="148" y="0" width="9" height="290" fill="#E8E2CC" opacity="0.75"/>
+      <rect x="286" y="0" width="9" height="290" fill="#E8E2CC" opacity="0.6"/>
+
+      <!-- ── Zone divider ── -->
+      <line x1="158" y1="0" x2="158" y2="290" stroke="white" stroke-width="1.2" stroke-dasharray="5,5" opacity="0.35"/>
+
+      <!-- ── Route lines ── -->
+      <!-- Zone A walking route: gold dashed -->
+      <polyline points="215,141 257,141 295,141 345,141 400,141"
+        fill="none" stroke="#C39909" stroke-width="3" stroke-dasharray="8,4" opacity="1"/>
+      <!-- Zone B driving route: white dashed -->
+      <polyline points="215,141 152,141 152,95 120,95 95,95"
+        fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.7"/>
+
+      <!-- ══ ZONE B STOPS — Navy fill #00345B, white text ══ -->
+
+      <!-- Stop 4: Hugo Reid Adobe -->
+      <circle cx="88" cy="108" r="14" fill="#00345B" stroke="white" stroke-width="2.5"/>
+      <text x="88" y="113" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="Jost,sans-serif">4</text>
+      <text x="88" y="130" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Hugo Reid</text>
+
+      <!-- Stop 3: Arboretum -->
+      <circle cx="116" cy="78" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
+      <text x="116" y="84" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">3</text>
+      <text x="116" y="104" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Arboretum</text>
+
+      <!-- Stop 2: Race Track -->
+      <circle cx="153" cy="78" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
+      <text x="153" y="84" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">2</text>
+      <text x="153" y="104" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Race Track</text>
+
+      <!-- ══ GILB MUSEUM — Red #A41E22, unmistakable ══ -->
+      <circle cx="215" cy="141" r="26" fill="#A41E22" opacity="0.3"/>
+      <circle cx="215" cy="141" r="21" fill="#A41E22" stroke="white" stroke-width="3.5"/>
+      <circle cx="215" cy="141" r="15" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+      <text x="215" y="147" text-anchor="middle" font-size="13" fill="white" font-weight="700" font-family="Jost,sans-serif">G</text>
+      <text x="215" y="174" text-anchor="middle" font-size="7.5" fill="white" font-weight="700" font-family="Jost,sans-serif">GILB MUSEUM</text>
+      <text x="215" y="185" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.8)" font-family="Jost,sans-serif">Start &amp; Finish</text>
+
+      <!-- ══ ZONE A STOPS — White fill, navy perimeter #00345B, navy number ══ -->
+
+      <!-- Stop 5: Anita Baldwin Sculpture -->
+      <circle cx="257" cy="141" r="14" fill="white" stroke="#00345B" stroke-width="3"/>
+      <text x="257" y="146" text-anchor="middle" font-size="10" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">5</text>
+      <text x="257" y="163" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">A. Baldwin</text>
+
+      <!-- Stop 7: County Park -->
+      <circle cx="295" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
+      <text x="295" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">6</text>
+      <text x="295" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">County Park</text>
+
+      <!-- Stop 8: Walk of Champions -->
+      <circle cx="345" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
+      <text x="345" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">7</text>
+      <text x="345" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">Walk/Champs</text>
+
+      <!-- Stop 9: Denny's Windmill -->
+      <circle cx="400" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
+      <text x="400" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">8</text>
+      <text x="400" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">Denny's</text>
+
+      <!-- ── Compass rose ── -->
+      <g transform="translate(398,243)">
+        <circle r="17" fill="rgba(0,52,91,0.85)" stroke="white" stroke-width="1.5"/>
+        <polygon points="0,-13 -4,-3 4,-3" fill="#C39909"/>
+        <text x="0" y="-2" text-anchor="middle" font-size="9" fill="white" font-weight="700" font-family="Jost,sans-serif">N</text>
+        <line x1="0" y1="1" x2="0" y2="9" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
       </g>
-      <!-- Zone badges -->
-      <rect x="10" y="220" width="52" height="18" rx="9" fill="#1A3320" opacity="0.2"/>
-      <text x="36" y="232" text-anchor="middle" font-size="8" fill="#1A3320" font-weight="600" font-family="Jost,sans-serif">Zone B · drive</text>
-      <rect x="74" y="220" width="52" height="18" rx="9" fill="#0F1F0F" opacity="0.1"/>
-      <text x="100" y="232" text-anchor="middle" font-size="8" fill="#1A3320" font-weight="600" font-family="Jost,sans-serif">Zone A · walk</text>
     </svg>
   </div>
-  <div class="map-legend" role="list">
-    <div class="leg" role="listitem"><div class="leg-dot" style="background:#0F1F0F"></div>Zone A (walk)</div>
-    <div class="leg" role="listitem"><div class="leg-dot" style="background:#1A3320"></div>Zone B (drive)</div>
-    <div class="leg" role="listitem"><div class="leg-dot" style="background:#C4922A"></div>Gilb Museum</div>
+
+  <!-- ── ADA-compliant legend ── -->
+  <div class="map-legend" role="list" style="
+    background:#004d2e;
+    border-bottom:2px solid rgba(255,255,255,0.2);
+    padding:12px 20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+  ">
+    <!-- Gilb Museum -->
+    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:#A41E22;border:3px solid white;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:9px;font-weight:700;color:white;font-family:Jost,sans-serif;">G</span>
+      </div>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Gilb Museum (Start/Finish)</span>
+    </div>
+    <!-- Zone B -->
+    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:#00345B;border:3px solid white;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:9px;font-weight:700;color:white;font-family:Jost,sans-serif;">B</span>
+      </div>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Zone B stops (drive)</span>
+    </div>
+    <!-- Zone A -->
+    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:white;border:3px solid #00345B;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:9px;font-weight:700;color:#00345B;font-family:Jost,sans-serif;">A</span>
+      </div>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Zone A stops (walk)</span>
+    </div>
+    <!-- Walking route -->
+    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
+      <div style="width:28px;height:6px;background:#C39909;border-radius:3px;flex-shrink:0;
+        background:repeating-linear-gradient(90deg,#C39909 0,#C39909 8px,transparent 8px,transparent 12px);"></div>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Walking route</span>
+    </div>
+    <!-- Driving route -->
+    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
+      <div style="width:28px;height:6px;border-radius:3px;flex-shrink:0;
+        background:repeating-linear-gradient(90deg,rgba(255,255,255,0.8) 0,rgba(255,255,255,0.8) 6px,transparent 6px,transparent 10px);"></div>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Driving route</span>
+    </div>
   </div>
   <div class="scroll padded" id="map-list" role="list"></div>
 </div>
@@ -1149,13 +1221,13 @@ body {
   <div class="scroll padded">
     <div class="about-hero">
       <div class="hero-zone">Eagle Scout Service Project</div>
-      <div class="about-title">Arcadia Heritage Hunt</div>
-      <div class="about-sub">A self-guided historic scavenger hunt through the landmarks that built Arcadia, California.</div>
+      <div class="about-title">Arcadia Lucky 9 Heritage Hunt</div>
+      <div class="about-sub">9 stops · ~4 miles · ~4 hours · Free — a self-guided historic hunt through Arcadia, California.</div>
     </div>
     <div class="about-body">
       <div class="about-section-title">About the project</div>
-      <p class="about-p">The Arcadia Heritage Hunt is an Eagle Scout Service Project designed to make Arcadia's rich history accessible and engaging for residents, visitors, families, and students of all ages.</p>
-      <p class="about-p">Participants visit 10 historic landmarks across the city, listen to narrated audio guides, solve riddles tied to each location's real history, and collect clues that lead them to the next stop — all without needing a tour guide.</p>
+      <p class="about-p">The Arcadia Lucky 9 Heritage Hunt is an Eagle Scout Service Project designed to make Arcadia's rich history accessible and engaging for residents, visitors, families, and students of all ages.</p>
+      <p class="about-p">Participants visit 9 historic landmarks across the city, listen to narrated audio guides, solve riddles tied to each location's real history, and collect clues that lead them to the next stop — all without needing a tour guide.</p>
       <p class="about-p">The hunt exists in two formats: this digital app, and a printed booklet available at the Gilb Museum for those who prefer a non-digital experience or want a keepsake souvenir.</p>
 
       <div class="about-section-title">Our beneficiary</div>
@@ -1171,20 +1243,20 @@ body {
 
       <div class="about-section-title">About the creator</div>
       <p class="about-p">This project was designed and built by Shaunak Sathe as an Eagle Scout Service Project for Boy Scouts of America Troop 2131. It represents the culmination of planning, community partnership, historical research, app development, and volunteer coordination.</p>
-      <div><span class="scout-badge">BSA Troop 2131 · Eagle Scout Project</span></div>
+      <div><span class="scout-badge">BSA Troop 2131 · Eagle Scout Service Project</span></div>
       <br>
       <button onclick="goScreen('admin')" style="background:none;border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:10px 16px;font-size:12px;color:var(--ink-lt);font-family:'Jost',sans-serif;cursor:pointer;width:100%;">🔒 Admin dashboard (project creator only)</button>
 
       <div class="about-section-title" style="margin-top:28px">How to use the app</div>
       <p class="about-p">Start at the Gilb Museum, then follow the clues in order. The app uses GPS to confirm you're near each stop before unlocking the riddle. Solve each riddle, submit your answer, and a clue to the next location appears automatically.</p>
-      <p class="about-p">All 10 stops are concentrated along Huntington Drive and the adjacent Arboretum area. Zone A stops are all walkable from the Gilb Museum. Zone B (the Arboretum cluster) requires a short drive west on Huntington Drive.</p>
+      <p class="about-p">All 9 stops are concentrated along Huntington Drive and the adjacent Arboretum area. Zone A stops are all walkable from the Gilb Museum. Zone B (the Arboretum cluster) requires a short drive west on Huntington Drive.</p>
 
       <div class="accessibility-note" role="note">
         <strong>Accessibility:</strong> This app works on any phone browser — no download required. The printed booklet version is available free at the Gilb Museum for visitors who prefer a non-digital experience. The route is largely flat and follows public sidewalks.
       </div>
 
       <div class="version-line">
-        Version 1.0 · Arcadia Heritage Hunt<br>
+        Version 1.0 · Arcadia Lucky 9 Heritage Hunt<br>
         © 2026 Shaunak Sathe · Troop 2131
       </div>
     </div>
@@ -1202,6 +1274,7 @@ body {
     <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
     <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
     <button class="nb active" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+    <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
   <div class="scroll padded">
     <div style="padding:20px 20px 8px">
@@ -1227,6 +1300,7 @@ body {
     <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
     <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
     <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+    <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
   <div class="scroll padded">
     <div style="padding:16px 20px 0">
@@ -1312,7 +1386,7 @@ const STOPS = [
     clue:'Still inside the Arboretum — find the oldest structure here, a modest adobe built beside the lake in 1839 by its first private owner.' },
   { id:4, n:'4', name:'Hugo Reid Adobe',
     addr:'Inside Arboretum · near Baldwin Lake',
-    zone:'Zone B · Stop 4 (inside Arboretum)', icon:'🏚',
+    zone:'Zone B · Stop 4', icon:'🏚',
     lat:34.1406, lng:-118.0531, radiusM:150,
     riddle:'I am a California Historical Landmark built in 1839. Hugo Reid was a Scotsman who married a Tongva woman named Victoria. He was granted this land by the Mexican government. What was the name of this rancho?',
     history:'Hugo Reid, a Scottish immigrant with Mexican citizenship, married Victoria, a Gabrielino/Tongva woman. In 1839 he was granted Rancho Santa Anita and built this adobe beside Baldwin Lake — one of the oldest standing structures in the San Gabriel Valley and a California Historical Landmark.',
@@ -1328,7 +1402,7 @@ const STOPS = [
     audio:'Anita Baldwin — A Legacy of Charity', dur:140,
     ans:'1932', hint:'Hint: California re-legalized pari-mutuel betting in 1933 — Anita secured her license the year before.',
     clue:'Head east on Huntington Drive to the corner of Santa Anita Avenue. Enter the large park where a bronze soldier has stood guard since 1941.' },
-  { id:6, n:'7', name:'Arcadia County Park',
+  { id:6, n:'6', name:'Arcadia County Park',
     addr:'405 S Santa Anita Ave · Zone A',
     zone:'Zone A · Stop 6', icon:'🌳',
     lat:34.1385, lng:-118.0320, radiusM:180,
@@ -1337,7 +1411,7 @@ const STOPS = [
     audio:'Arcadia County Park & its Memorials', dur:160,
     ans:'14', hint:'Hint: Read the bronze plaque on the Vietnam War Memorial and count the names.',
     clue:'Stay on Huntington Drive heading east. Between Santa Anita Ave and 2nd Ave, look down — the legends of California horse racing are literally beneath your feet in the sidewalk.' },
-  { id:7, n:'8', name:'Walk of Champions',
+  { id:7, n:'7', name:'Walk of Champions',
     addr:'Huntington Dr, Santa Anita Ave to 2nd Ave',
     zone:'Zone A · Stop 7', icon:'🥇',
     lat:34.1403, lng:-118.0285, radiusM:150,
@@ -1346,24 +1420,24 @@ const STOPS = [
     audio:'The Walk of Champions Story', dur:120,
     ans:'zenyatta', hint:'Hint: She was immense in size (17.2 hands) and immense in heart — she lost only once in 20 career races.',
     clue:'Continue east along Huntington Drive just a little further. Your final outdoor stop is a landmark that has been spinning in the Arcadia sky for generations — look for the windmill.' },
-  { id:8, n:'9', name:"Denny's Windmill",
+  { id:8, n:'8', name:"Denny's Windmill",
     addr:'7 E Huntington Dr · Zone A (easternmost stop)',
     zone:'Zone A · Stop 8', icon:'🌀',
     lat:34.1403, lng:-118.0311, radiusM:100,
     riddle:'You\'ve reached the easternmost stop! The windmill at this Arcadia Denny\'s is one of the most recognized landmarks in the city. Stand in front of it and count carefully — how many blades does this windmill have?',
-    history:'The Arcadia Denny\'s windmill is a beloved local landmark that has anchored this corner for generations. A quirky and iconic piece of Arcadia streetscape history, it marks the end of the eastward leg of the hunt. From here, you head back west along Huntington Drive to the Gilb Museum to complete the Heritage Hunt.',
+    history:'The Arcadia Denny\'s windmill is a beloved local landmark that has anchored this corner for generations. A quirky and iconic piece of Arcadia streetscape history, it marks the end of the eastward leg of the hunt. From here, you head back west along Huntington Drive to the Gilb Museum to complete the Lucky 9 Heritage Hunt.',
     audio:"Arcadia's Iconic Windmill", dur:90,
     ans:'4', hint:'Hint: Traditional windmills typically have 4 blades arranged as a cross — count them directly.',
     clue:'Head back west along Huntington Drive to where you started. The Gilb Museum is waiting — you\'re almost there!' },
-  { id:9, n:'10', name:'Gilb Museum — Final Stop',
+  { id:9, n:'9', name:'Gilb Museum — Final Stop',
     addr:'380 W Huntington Dr · Hunt Complete',
-    zone:'Zone A · Final Stop', icon:'🏁',
+    zone:'Zone A · Stop 9 (Final)', icon:'🏁',
     lat:34.1319, lng:-118.0429, radiusM:120,
-    riddle:'Welcome back, explorer! You\'ve completed the full Arcadia Heritage Hunt. To receive your official completion certificate from museum staff, tell them the secret completion code — the answer you discovered at your very first stop.',
-    history:'Congratulations — you\'ve completed the Arcadia Heritage Hunt! You\'ve journeyed through 3,000 years of history, from the Tongva village of Aleupkigna through Spanish missions, Mexican ranchos, Lucky Baldwin\'s empire, horse racing glory, wartime sacrifice, and a city\'s enduring pride. Thank you for exploring Arcadia\'s story.',
+    riddle:'Welcome back, explorer! You\'ve completed the Arcadia Lucky 9 Heritage Hunt. To receive your official completion certificate from museum staff, tell them the secret completion code — the answer you discovered at your very first stop.',
+    history:'Congratulations — you\'ve completed the Arcadia Lucky 9 Heritage Hunt! You\'ve journeyed through 3,000 years of history, from the Tongva village of Aleupkigna through Spanish missions, Mexican ranchos, Lucky Baldwin\'s empire, horse racing glory, wartime sacrifice, and a city\'s enduring pride. Thank you for exploring Arcadia\'s story.',
     audio:'Congratulations — Hunt Complete!', dur:105,
     ans:'1909', hint:'Hint: Your very first answer — the year horse racing was banned in California.',
-    clue:'🏆 Hunt complete! Show this screen to museum staff to receive your official Arcadia Heritage Hunt completion certificate. Well done!' }
+    clue:'🏆 Hunt complete! Show this screen to museum staff to receive your official Lucky 9 Heritage Hunt completion certificate. Well done!' }
 ];
 
 /* ═══════════ STATE ═══════════ */
@@ -1429,7 +1503,7 @@ function goScreen(name) {
 /* ═══════════ HOME ═══════════ */
 function buildHome() {
   // Home screen no longer shows stop list — just update progress bar
-  const total = STOPS.length - 1;
+  const total = STOPS.length;
   const cnt   = Math.min(done.size, total);
   const progTxt  = document.getElementById('h-prog-txt');
   const progFill = document.getElementById('h-prog-fill');
@@ -1772,7 +1846,7 @@ function checkAnswer() {
       document.getElementById('modal-glyph').textContent = isLast ? '🏆' : '🗺️';
       document.getElementById('modal-title').textContent = isLast ? 'Hunt complete!' : `Stop ${current.n} done!`;
       document.getElementById('modal-body').textContent  = isLast
-        ? 'You\'ve completed the full Arcadia Heritage Hunt! Return to the Gilb Museum to claim your completion certificate.'
+        ? 'You\'ve completed the Arcadia Lucky 9 Heritage Hunt! Return to the Gilb Museum to claim your completion certificate.'
         : `Great work! Next up: "${remaining[0]?.name}". Follow the clue below to get there.`;
       document.getElementById('modal').classList.add('show');
     }, 600);
@@ -1829,7 +1903,7 @@ function buildMap() {
 
 /* ═══════════ PROGRESS ═══════════ */
 function buildProgress() {
-  const total = STOPS.length - 1;
+  const total = STOPS.length;
   const cnt   = Math.min(done.size, total);
   const pct   = Math.round((cnt/total)*100);
   const circ  = 2 * Math.PI * 60;
@@ -1881,7 +1955,7 @@ window._renderLeaderboard = (rows, myUserId) => {
       <div style="text-align:center;padding:48px 20px;">
         <div style="font-size:40px;margin-bottom:12px;">🏅</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest);margin-bottom:8px;">No completions yet</div>
-        <div style="font-size:13px;color:var(--ink-lt);line-height:1.6;">Be the first to finish the full Arcadia Heritage Hunt and claim the top spot!</div>
+        <div style="font-size:13px;color:var(--ink-lt);line-height:1.6;">Be the first to finish the Arcadia Lucky 9 Heritage Hunt and claim the top spot!</div>
       </div>`;
     return;
   }
