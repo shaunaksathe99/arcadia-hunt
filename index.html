@@ -6,7 +6,10 @@
 <meta name="description" content="Explore Arcadia's history through a self-guided scavenger hunt. Visit 10 historic landmarks, solve riddles, and discover the stories that built this city.">
 <meta name="theme-color" content="#0F1F0F">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F1F0F'/%3E%3Cpath d='M16 6L8 11v10l8 5 8-5V11L16 6z' stroke='%23C4922A' stroke-width='1.5' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M16 6v14M8 11l8 5 8-5' stroke='%23C4922A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F1F0F'/%3E%3Cpath d='M16 6L8 11v10l8 5 8-5V11L16 6z' stroke='%23C4922A' stroke-width='1.5' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M16 6v14M8 11l8 5 8-5' stroke='%23C4922A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
 <title>Arcadia Heritage Hunt</title>
 <!-- ═══ FIREBASE SDK ═══ -->
 <script type="module">
@@ -175,7 +178,7 @@ body {
 .screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
 .screen.active { display: flex; }
 .scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-.scroll.padded { padding-bottom: 90px; }
+.scroll.padded { padding-top: 0; }
 
 /* ═══════════════ ONBOARDING ═══════════════ */
 #scr-onboard {
@@ -731,8 +734,9 @@ body {
 /* ═══════════════ BOTTOM NAV ═══════════════ */
 .bnav {
   background: var(--forest); flex-shrink: 0;
-  display: flex; position: sticky; bottom: 0; z-index: 10;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; position: sticky; top: 0; z-index: 20;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  order: -1;
 }
 .nb {
   flex: 1; padding: 10px 4px 13px;
@@ -885,11 +889,6 @@ body {
     </div>
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="rgba(248,244,236,0.4)" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="rgba(248,244,236,0.4)" stroke-width="1.5" stroke-linecap="round"/></svg>
   </div>
-  <div class="prog-strip" role="progressbar" aria-label="Hunt progress">
-    <div class="prog-row"><span>Your progress</span><strong id="h-prog-txt">0 of 9 stops</strong></div>
-    <div class="prog-track"><div class="prog-fill" id="h-prog-fill" style="width:0%"></div></div>
-  </div>
-  <div class="scroll padded" id="home-list" role="list"></div>
   <nav class="bnav" aria-label="Main navigation">
     <button class="nb active" id="nb-home" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
     <button class="nb" id="nb-map" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
@@ -897,6 +896,60 @@ body {
     <button class="nb" id="nb-board" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
     <button class="nb" id="nb-about" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
+  <div class="scroll padded">
+    <!-- Progress strip -->
+    <div class="prog-strip" role="progressbar" aria-label="Hunt progress" style="margin:0;padding:12px 20px 16px;">
+      <div class="prog-row"><span>Your progress</span><strong id="h-prog-txt">0 of 9 stops</strong></div>
+      <div class="prog-track"><div class="prog-fill" id="h-prog-fill" style="width:0%"></div></div>
+    </div>
+    <!-- Welcome card -->
+    <div style="padding:20px;">
+      <div style="background:var(--forest);border-radius:var(--r);padding:24px;margin-bottom:16px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--cream);margin-bottom:8px;line-height:1.2;">Welcome to the<br>Arcadia Heritage Hunt</div>
+        <div style="font-size:13px;color:rgba(248,244,236,0.6);line-height:1.7;">Explore 10 historic landmarks across Arcadia, California. Solve riddles, listen to audio guides, and discover the stories that built this city.</div>
+        <button onclick="goScreen('map')" style="margin-top:16px;width:100%;padding:14px;background:var(--gold);color:var(--forest);border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;letter-spacing:0.4px;">View the map & start →</button>
+      </div>
+      <!-- Quick info cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">10</div>
+          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Historic stops</div>
+        </div>
+        <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">3.5</div>
+          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Miles total</div>
+        </div>
+        <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">~4</div>
+          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">Hours to complete</div>
+        </div>
+        <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);">Free</div>
+          <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">No cost to play</div>
+        </div>
+      </div>
+      <!-- How it works -->
+      <div style="background:var(--cream-md);border:1px solid var(--cream-dk);border-radius:var(--r);padding:16px;">
+        <div style="font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-lt);margin-bottom:12px;">How it works</div>
+        <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:24px;height:24px;background:var(--forest);border-radius:50%;color:var(--gold);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="font-size:13px;color:var(--ink-mid);line-height:1.5;">Start at the <strong>Gilb Museum</strong> on Huntington Drive</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:24px;height:24px;background:var(--forest);border-radius:50%;color:var(--gold);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="font-size:13px;color:var(--ink-mid);line-height:1.5;">Tap a stop on the <strong>Map</strong> to read the riddle and listen to the audio guide</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:24px;height:24px;background:var(--forest);border-radius:50%;color:var(--gold);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="font-size:13px;color:var(--ink-mid);line-height:1.5;">Submit the correct answer to <strong>unlock the next clue</strong></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;background:var(--forest);border-radius:50%;color:var(--gold);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="font-size:13px;color:var(--ink-mid);line-height:1.5;">Return to the Gilb Museum to <strong>claim your certificate</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ════════════ DETAIL ════════════ -->
@@ -981,6 +1034,12 @@ body {
   <div class="topbar">
     <div><div class="tb-title">Route Map</div><div class="tb-sub">All 10 stops · Arcadia, CA</div></div>
   </div>
+  <nav class="bnav" aria-label="Main navigation">
+    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
+    <button class="nb active" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
+    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
+    <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+  </nav>
   <div class="map-container" role="img" aria-label="Map of Arcadia showing all 10 scavenger hunt stops">
     <svg viewBox="0 0 430 270" xmlns="http://www.w3.org/2000/svg">
       <rect width="430" height="270" fill="#C4D8C4"/>
@@ -1043,12 +1102,6 @@ body {
     <div class="leg" role="listitem"><div class="leg-dot" style="background:#C4922A"></div>Gilb Museum</div>
   </div>
   <div class="scroll padded" id="map-list" role="list"></div>
-  <nav class="bnav" aria-label="Main navigation">
-    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
-    <button class="nb active" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
-    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
-    <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
-  </nav>
 </div>
 
 <!-- ════════════ PROGRESS ════════════ -->
@@ -1056,6 +1109,13 @@ body {
   <div class="topbar">
     <div><div class="tb-title">Your Progress</div><div class="tb-sub" id="prog-sub">0 of 9 stops completed</div></div>
   </div>
+  <nav class="bnav" aria-label="Main navigation">
+    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
+    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
+    <button class="nb active" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
+    <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+    <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
+  </nav>
   <div class="scroll padded">
     <div class="ring-section">
       <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Progress ring">
@@ -1071,12 +1131,6 @@ body {
     <div class="sec-lbl">Stop by stop</div>
     <div id="prog-list" role="list"></div>
   </div>
-  <nav class="bnav" aria-label="Main navigation">
-    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
-    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
-    <button class="nb active" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
-    <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
-  </nav>
 </div>
 
 <!-- ════════════ ABOUT ════════════ -->
@@ -1085,6 +1139,13 @@ body {
     <div style="flex:1"><div class="tb-title">About</div></div>
     <button class="back-btn" onclick="goScreen('home')" aria-label="Back to home">← Back</button>
   </div>
+  <nav class="bnav" aria-label="Main navigation">
+    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
+    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
+    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
+    <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+    <button class="nb active" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
+  </nav>
   <div class="scroll padded">
     <div class="about-hero">
       <div class="hero-zone">Eagle Scout Service Project</div>
@@ -1128,12 +1189,6 @@ body {
       </div>
     </div>
   </div>
-  <nav class="bnav" aria-label="Main navigation">
-    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
-    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
-    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
-    <button class="nb active" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
-  </nav>
 </div>
 
 <!-- ════════════ LEADERBOARD ════════════ -->
@@ -1142,6 +1197,12 @@ body {
     <div><div class="tb-title">Leaderboard</div><div class="tb-sub">Fastest completions</div></div>
     <button class="back-btn" onclick="goScreen('home')" aria-label="Back">← Back</button>
   </div>
+  <nav class="bnav" aria-label="Main navigation">
+    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
+    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
+    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
+    <button class="nb active" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+  </nav>
   <div class="scroll padded">
     <div style="padding:20px 20px 8px">
       <div style="background:var(--forest);border-radius:var(--r);padding:18px 20px;margin-bottom:20px;">
@@ -1153,12 +1214,6 @@ body {
       <div style="text-align:center;padding:40px 20px;color:var(--ink-lt);font-size:14px;">Loading leaderboard…</div>
     </div>
   </div>
-  <nav class="bnav" aria-label="Main navigation">
-    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
-    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
-    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
-    <button class="nb active" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
-  </nav>
 </div>
 
 <!-- ════════════ ADMIN ════════════ -->
@@ -1167,6 +1222,12 @@ body {
     <div><div class="tb-title">Admin Dashboard</div><div class="tb-sub">Shaunak Sathe — project view</div></div>
     <button class="back-btn" onclick="goScreen('home')" aria-label="Back">← Back</button>
   </div>
+  <nav class="bnav" aria-label="Main navigation">
+    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
+    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
+    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
+    <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
+  </nav>
   <div class="scroll padded">
     <div style="padding:16px 20px 0">
       <div id="admin-gate" style="background:var(--cream-md);border:1.5px solid var(--cream-dk);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:16px;">
@@ -1188,12 +1249,20 @@ body {
       </div>
     </div>
   </div>
-  <nav class="bnav" aria-label="Main navigation">
-    <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
-    <button class="nb" onclick="goScreen('map')" aria-label="Map"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5-2V4l5 2m0 14l6-2m-6 2V6m6 12l5 2V4l-5-2m0 16V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Map</button>
-    <button class="nb" onclick="goScreen('progress')" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Progress</button>
-    <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
-  </nav>
+</div>
+
+<div class="modal-bg" id="reset-modal" role="dialog" aria-modal="true">
+  <div class="modal-sheet">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="modal-glyph">↺</div>
+    <div class="modal-title">Reset progress?</div>
+    <div class="modal-body">This will clear all your completed stops and start the hunt from the beginning. This cannot be undone.</div>
+    <button class="modal-cta" style="background:var(--rust,#8B3A1A);color:white;margin-bottom:10px;" onclick="doReset()">Yes, reset everything</button>
+    <button onclick="document.getElementById('reset-modal').classList.remove('show')"
+      style="width:100%;padding:14px;background:none;border:1.5px solid var(--cream-dk);border-radius:var(--r);font-size:14px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--ink-lt);">
+      Cancel
+    </button>
+  </div>
 </div>
 
 <!-- ════════════ UNLOCK MODAL ════════════ -->
@@ -1314,6 +1383,7 @@ window._refreshAllScreens = () => {
   buildHome();
   buildMap();
   buildProgress();
+  goScreen('map');
 };
 
 function saveDone() {
@@ -1327,7 +1397,7 @@ function saveDone() {
 
 /* ═══════════ ONBOARDING ═══════════ */
 function startHunt() {
-  goScreen('home');
+  goScreen('map');
 }
 function showAboutFromOnboard() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1358,30 +1428,13 @@ function goScreen(name) {
 
 /* ═══════════ HOME ═══════════ */
 function buildHome() {
-  const el = document.getElementById('home-list');
-  el.innerHTML = '';
-  const doneList    = STOPS.filter(s => done.has(s.id));
-  const remaining   = STOPS.filter(s => !done.has(s.id));
-  const next        = remaining[0];
-  const locked      = remaining.slice(1);
-
-  if (doneList.length) {
-    el.innerHTML += `<div class="sec-lbl" role="heading" aria-level="3">Completed</div>`;
-    doneList.forEach(s => el.appendChild(makeCard(s, 'done')));
-  }
-  if (next) {
-    el.innerHTML += `<div class="sec-lbl" role="heading" aria-level="3">Up next</div>`;
-    el.appendChild(makeCard(next, 'next'));
-  }
-  if (locked.length) {
-    el.innerHTML += `<div class="sec-lbl" role="heading" aria-level="3">Upcoming</div>`;
-    locked.forEach(s => el.appendChild(makeCard(s, 'locked')));
-  }
-
+  // Home screen no longer shows stop list — just update progress bar
   const total = STOPS.length - 1;
   const cnt   = Math.min(done.size, total);
-  document.getElementById('h-prog-txt').textContent  = `${cnt} of ${total} stops`;
-  document.getElementById('h-prog-fill').style.width = `${(cnt/total)*100}%`;
+  const progTxt  = document.getElementById('h-prog-txt');
+  const progFill = document.getElementById('h-prog-fill');
+  if (progTxt)  progTxt.textContent  = `${cnt} of ${total} stops`;
+  if (progFill) progFill.style.width = `${(cnt/total)*100}%`;
 }
 
 function makeCard(s, status) {
@@ -1424,9 +1477,45 @@ function makeCard(s, status) {
     const expander = document.createElement('div');
     expander.className = 'clue-expander';
     expander.id = expanderId;
+
+    // Find the next stop after this one
+    const allIds   = STOPS.map(s2 => s2.id);
+    const thisIdx  = allIds.indexOf(s.id);
+    const nextStop = STOPS[thisIdx + 1];
+    const dirUrl   = nextStop
+      ? `https://www.google.com/maps/dir/?api=1&destination=${nextStop.lat},${nextStop.lng}`
+      : null;
+
     expander.innerHTML = `
       <div class="clue-eye-sm">Next clue</div>
-      <div class="clue-body-sm">${s.clue}</div>`;
+      <div class="clue-body-sm">${s.clue}</div>
+      ${nextStop ? `
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+          <a href="${dirUrl}" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:6px;
+              padding:9px 14px;background:var(--forest);color:var(--gold);
+              border-radius:8px;font-size:12px;font-weight:700;
+              font-family:'Jost',sans-serif;text-decoration:none;letter-spacing:0.3px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+                fill="currentColor" opacity="0.8"/>
+              <circle cx="12" cy="9" r="2.5" fill="var(--forest)"/>
+            </svg>
+            Directions to ${nextStop.name.split(' ').slice(0,2).join(' ')}
+          </a>
+          <button onclick="openDetail(STOPS.find(s=>s.id===${nextStop.id}))"
+            style="display:inline-flex;align-items:center;gap:6px;
+              padding:9px 14px;background:none;
+              border:1.5px solid var(--sage);color:var(--sage);
+              border-radius:8px;font-size:12px;font-weight:700;
+              font-family:'Jost',sans-serif;cursor:pointer;letter-spacing:0.3px;">
+            View stop details →
+          </button>
+        </div>` : `
+        <div style="margin-top:10px;font-size:12px;color:var(--sage);font-weight:600;">
+          🏆 Return to the Gilb Museum to finish!
+        </div>`}
+    `;
 
     wrap.appendChild(btn);
     wrap.appendChild(expander);
@@ -1439,6 +1528,21 @@ function makeCard(s, status) {
       <div class="stop-info">
         <div class="stop-name">${s.name}</div>
         <div class="stop-sub">${sub}</div>
+        ${status === 'next' ? `
+          <a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}"
+            target="_blank" rel="noopener"
+            onclick="event.stopPropagation()"
+            style="display:inline-flex;align-items:center;gap:5px;
+              margin-top:6px;padding:6px 10px;
+              background:var(--forest);color:var(--gold);
+              border-radius:6px;font-size:11px;font-weight:700;
+              font-family:'Jost',sans-serif;text-decoration:none;letter-spacing:0.3px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor" opacity="0.8"/>
+              <circle cx="12" cy="9" r="2.5" fill="var(--forest)"/>
+            </svg>
+            Get directions
+          </a>` : ''}
       </div>
       <span class="chip ${chipCls}" aria-label="${label}">${label}</span>`;
     btn.setAttribute('aria-label', `${s.name} — ${label}`);
@@ -1632,8 +1736,9 @@ document.getElementById('answer-inp').addEventListener('keydown', e => {
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
   buildHome();
+  buildMap();
   buildProgress();
-  goScreen('home');
+  goScreen('map');
 }
 
 /* ═══════════ MAP ═══════════ */
@@ -1823,10 +1928,31 @@ window._renderAdminStats = (users) => {
   }
 };
 
+/* ═══════════ RESET ═══════════ */
+function confirmReset() {
+  const modal = document.getElementById('reset-modal');
+  if (modal) { modal.classList.add('show'); return; }
+  // Fallback if modal not found
+  if (confirm('Reset all progress? This cannot be undone.')) doReset();
+}
+function doReset() {
+  done.clear();
+  window._done = done;
+  try { localStorage.removeItem('ahh_done'); } catch(e){}
+  document.getElementById('reset-modal')?.classList.remove('show');
+  buildHome();
+  buildMap();
+  buildProgress();
+  toast('Progress reset — starting fresh!');
+  goScreen('home');
+}
+
 /* ═══════════ INIT ═══════════ */
 buildHome();
 buildMap();
 buildProgress();
+// Default to map screen on load
+goScreen('map');
 </script>
 </body>
 </html>
