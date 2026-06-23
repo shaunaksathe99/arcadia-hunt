@@ -1576,7 +1576,7 @@ function openDetail(s) {
   document.getElementById('d-riddle').textContent   = s.riddle;
   document.getElementById('d-history').textContent  = s.history;
   document.getElementById('a-name').textContent     = s.audio;
-  document.getElementById('a-meta').textContent     = formatDur(s.dur) + ' · tap to play';
+  document.getElementById('a-meta').textContent     = 'Tap to play';
   document.getElementById('hint-panel').textContent = s.hint;
   document.getElementById('hint-panel').classList.remove('show');
   document.getElementById('clue-box').classList.remove('show');
@@ -1656,31 +1656,91 @@ function haversine(lat1, lon1, lat2, lon2) {
 }
 
 /* ═══════════ AUDIO ═══════════ */
+/* ═══════════ AUDIO ═══════════ */
+let audioPlayer = null; // single HTMLAudioElement reused across stops
+
 function toggleAudio() {
-  if (audioOn) { stopAudio(); return; }
-  audioOn = true;
-  document.getElementById('audio-btn').classList.add('playing');
-  toast('Playing audio guide…');
-  const total = current ? current.dur : 120;
-  audioInt = setInterval(() => {
-    audioPos++;
-    document.getElementById('a-prog').style.width = Math.min((audioPos/total)*100,100)+'%';
-    if (audioPos >= total) { stopAudio(); }
-  }, 80);
+  if (!current) return;
+
+  // Build the file URL from the stop index (Clue1.m4a … Clue9.m4a)
+  const stopIndex = STOPS.findIndex(s => s.id === current.id) + 1;
+  const audioUrl  = `Clue${stopIndex}.m4a`;
+
+  // If we already have a player for this stop, toggle play/pause
+  if (audioPlayer && audioPlayer.dataset.stop === String(stopIndex)) {
+    if (audioPlayer.paused) {
+      audioPlayer.play().catch(() => toast('Could not play audio'));
+    } else {
+      audioPlayer.pause();
+    }
+    return;
+  }
+
+  // New stop — create a fresh audio element
+  if (audioPlayer) { audioPlayer.pause(); audioPlayer = null; }
+
+  audioPlayer = new Audio(audioUrl);
+  audioPlayer.dataset.stop = String(stopIndex);
+
+  // Update UI as audio plays
+  audioPlayer.addEventListener('timeupdate', () => {
+    if (!audioPlayer.duration) return;
+    const pct = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    const bar = document.getElementById('a-prog');
+    if (bar) bar.style.width = pct + '%';
+    const meta = document.getElementById('a-meta');
+    if (meta) {
+      const rem = Math.max(0, Math.round(audioPlayer.duration - audioPlayer.currentTime));
+      meta.textContent = formatDur(rem) + ' remaining';
+    }
+  });
+
+  audioPlayer.addEventListener('play', () => {
+    document.getElementById('audio-btn')?.classList.add('playing');
+  });
+
+  audioPlayer.addEventListener('pause', () => {
+    document.getElementById('audio-btn')?.classList.remove('playing');
+  });
+
+  audioPlayer.addEventListener('ended', () => {
+    document.getElementById('audio-btn')?.classList.remove('playing');
+    const bar  = document.getElementById('a-prog');
+    const meta = document.getElementById('a-meta');
+    if (bar)  bar.style.width = '100%';
+    if (meta) meta.textContent = 'Finished · tap to replay';
+  });
+
+  audioPlayer.addEventListener('error', () => {
+    toast('Audio file not found — check Clue' + stopIndex + '.m4a is uploaded');
+    document.getElementById('audio-btn')?.classList.remove('playing');
+  });
+
+  audioPlayer.play().catch(() => toast('Tap again to play audio'));
 }
+
 function stopAudio() {
-  clearInterval(audioInt);
-  audioOn = false;
+  if (audioPlayer) {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+  }
   document.getElementById('audio-btn')?.classList.remove('playing');
 }
+
 function resetAudioUI() {
-  stopAudio();
-  audioPos = 0;
-  const p = document.getElementById('a-prog');
-  if (p) p.style.width = '0%';
+  if (audioPlayer) {
+    audioPlayer.pause();
+    audioPlayer = null;
+  }
+  const p    = document.getElementById('a-prog');
+  const meta = document.getElementById('a-meta');
+  if (p)    p.style.width = '0%';
+  if (meta) meta.textContent = 'Tap to play';
 }
+
 function formatDur(secs) {
-  return Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
+  const s = Math.round(secs);
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
 }
 
 /* ═══════════ HINT ═══════════ */
