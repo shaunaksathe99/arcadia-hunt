@@ -1136,32 +1136,32 @@ body {
       <!-- Zone A walking route: gold dashed -->
       <polyline points="215,141 257,141 295,141 345,141 400,141"
         fill="none" stroke="#C39909" stroke-width="3" stroke-dasharray="8,4" opacity="1"/>
-      <!-- Zone B driving route: white dashed -->
-      <polyline points="215,141 152,141 152,95 120,95 95,95"
+      <!-- Zone B driving route: white dashed (Gilb → 2 → 3 → 4 → 5) -->
+      <polyline points="215,141 152,141 152,58 128,58 90,98 52,58 28,104"
         fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.7"/>
 
       <!-- ══ ZONE B STOPS — Navy fill #00345B, white text ══ -->
+      <!-- Rule: the number's x = circle's cx, and its y = cy + 5 (r14) or cy + 6 (r17) -->
 
-      <!-- Stop 5: Hugo Reid Adobe -->
-      <circle cx="88" cy="108" r="14" fill="#00345B" stroke="white" stroke-width="2.5"/>
-      <text x="88" y="113" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="Jost,sans-serif">5</text>
-      <text x="88" y="130" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Hugo Reid</text>
-
-      <!-- Stop 4: Arboretum -->
-      <circle cx="116" cy="78" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
-      <text x="116" y="84" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">4</text>
-      <text x="116" y="104" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Arboretum</text>
+      <!-- Stop 2: Race Track -->
+      <circle cx="128" cy="58" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
+      <text x="128" y="64" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">2</text>
+      <text x="128" y="84" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Race Track</text>
 
       <!-- Stop 3: Lucky Baldwin Statue -->
-      <circle cx="130" cy="85" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
-      <text x="153" y="84" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">3</text>
-      <text x="153" y="104" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Lucky Baldwin Statue</text>
-      
-      <!-- Stop 2: Race Track -->
-      <circle cx="153" cy="78" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
-      <text x="153" y="84" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">2</text>
-      <text x="153" y="104" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Race Track</text>
+      <circle cx="90" cy="98" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
+      <text x="90" y="104" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">3</text>
+      <text x="90" y="124" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Baldwin Statue</text>
 
+      <!-- Stop 4: Arboretum -->
+      <circle cx="52" cy="58" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
+      <text x="52" y="64" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">4</text>
+      <text x="52" y="84" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Arboretum</text>
+
+      <!-- Stop 5: Hugo Reid Adobe -->
+      <circle cx="28" cy="104" r="14" fill="#00345B" stroke="white" stroke-width="2.5"/>
+      <text x="28" y="109" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="Jost,sans-serif">5</text>
+      <text x="28" y="128" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Hugo Reid</text>
       <!-- ══ GILB MUSEUM — Red #A41E22, unmistakable ══ -->
       <circle cx="215" cy="141" r="26" fill="#A41E22" opacity="0.3"/>
       <circle cx="215" cy="141" r="21" fill="#A41E22" stroke="white" stroke-width="3.5"/>
@@ -1174,23 +1174,24 @@ body {
 
       <!-- Stop 6: Anita Baldwin Sculpture -->
       <circle cx="257" cy="141" r="14" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="257" y="146" text-anchor="middle" font-size="10" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">5</text>
+      <text x="257" y="146" text-anchor="middle" font-size="10" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">6</text>
       <text x="257" y="163" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">A. Baldwin</text>
 
       <!-- Stop 7: County Park -->
       <circle cx="295" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="295" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">6</text>
+      <text x="295" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">7</text>
       <text x="295" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">County Park</text>
 
       <!-- Stop 8: Walk of Champions -->
       <circle cx="345" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="345" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">7</text>
+      <text x="345" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">8</text>
       <text x="345" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">Walk/Champs</text>
 
       <!-- Stop 9: Denny's Windmill -->
       <circle cx="400" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="400" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">8</text>
+      <text x="400" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">9</text>
       <text x="400" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">Denny's</text>
+
 
       <!-- ── Compass rose ── -->
       <g transform="translate(398,243)">
