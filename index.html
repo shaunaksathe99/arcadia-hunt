@@ -483,6 +483,62 @@ body {
   color: var(--ink);
 }
 
+/* Visual clue */
+.visual-card {
+  background: var(--cream-md);
+  border-radius: var(--r); padding: 14px;
+  border-left: 4px solid var(--sage);
+  margin-bottom: 22px;
+}
+.visual-frame {
+  position: relative; width: 100%;
+  border-radius: var(--r-sm); overflow: hidden;
+  background: var(--cream-dk);
+  aspect-ratio: 4 / 3;
+  border: none; padding: 0; cursor: zoom-in; display: block;
+}
+.visual-frame img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.visual-frame img.loaded { opacity: 1; }
+.visual-loading {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--ink-lt);
+}
+.visual-frame img.loaded + .visual-loading { display: none; }
+.visual-zoom-tag {
+  position: absolute; right: 8px; bottom: 8px;
+  background: rgba(15,31,15,0.75); color: var(--cream);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.4px;
+  padding: 4px 9px; border-radius: 99px; pointer-events: none;
+}
+.visual-caption {
+  font-size: 12px; color: var(--ink-mid); line-height: 1.5;
+  margin-top: 10px; font-style: italic;
+}
+.visual-caption:empty { display: none; }
+
+/* Full-screen image viewer */
+.img-viewer {
+  display: none; position: fixed; inset: 0; z-index: 150;
+  background: rgba(15,31,15,0.94);
+  align-items: center; justify-content: center; padding: 16px;
+}
+.img-viewer.show { display: flex; }
+.img-viewer img {
+  max-width: 100%; max-height: 85vh; border-radius: var(--r-sm);
+  object-fit: contain;
+}
+.img-viewer-close {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(248,244,236,0.12); color: var(--cream);
+  border: 1px solid rgba(248,244,236,0.25); border-radius: 99px;
+  padding: 8px 16px; font-size: 13px; font-weight: 600;
+  font-family: 'Jost', sans-serif; cursor: pointer;
+}
+  
 /* History */
 .d-lbl {
   font-size: 9px; font-weight: 600; letter-spacing: 1.8px;
@@ -985,9 +1041,15 @@ body {
       </div>
 
       <!-- Visual Clue -->
-      <div class="d-lbl">Visual Clue</div>
-      <img src=""></img>
-      <!-- <div class="history-text" id="d-history">…</div> -->
+      <div class="visual-card" id="visual-card" role="region" aria-label="Visual clue">
+        <div class="card-eye sage">Visual clue</div>
+        <button class="visual-frame" id="visual-frame" onclick="openImageViewer()" aria-label="Enlarge visual clue">
+          <img id="visual-img" alt="Visual clue for this stop">
+          <div class="visual-loading" id="visual-loading">Loading image…</div>
+          <span class="visual-zoom-tag" aria-hidden="true">Tap to enlarge</span>
+        </button>
+        <div class="visual-caption" id="visual-caption"></div>
+      </div>
       
       <!-- History -->
       <div class="d-lbl">About this site</div>
@@ -1356,6 +1418,12 @@ body {
   </div>
 </div>
 
+<!-- ════════════ IMAGE VIEWER ════════════ -->
+<div class="img-viewer" id="img-viewer" role="dialog" aria-modal="true" aria-label="Visual clue, enlarged" onclick="closeImageViewer()">
+  <button class="img-viewer-close" onclick="closeImageViewer()" aria-label="Close image">✕ Close</button>
+  <img id="img-viewer-img" alt="Visual clue, enlarged" onclick="event.stopPropagation()">
+</div>
+  
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -1367,6 +1435,8 @@ const STOPS = [
     addr:'380 W Huntington Dr · Start & Finish',
     zone:'Zone A · Stop 1', icon:'🏛',
     lat:34.1319, lng:-118.0429, radiusM:120,
+    img:'GilbMuseum2.jpg',
+    imgCaption:'Gilb Museum',
     riddle:'I hold the memory of a city — from the Tongva people who first called this land home, through a lucky man\'s dreams, to the thundering hooves that made Arcadia famous. Find the exhibit about the original Santa Anita racetrack. What year did the California state legislature outlaw horse racing?',
     history:'The Gilb Museum of Arcadia Heritage has preserved and celebrated the city\'s story since 2001. Its seven interpretive galleries trace Arcadia from its Tongva origins through Lucky Baldwin\'s era, the iconic racetrack, the World War I balloon school, and Japanese American internment history. Admission is always free.',
     audio:'Welcome to the Gilb Museum', dur:165,
@@ -1376,6 +1446,8 @@ const STOPS = [
     addr:'285 W Huntington Dr · Zone B (drive west)',
     zone:'Zone B · Stop 2', icon:'🏇',
     lat:34.1392, lng:-118.0453, radiusM:200,
+    img:'Santa Anita Park.JPG',
+    imgCaption:'Santa Anita Race Track',
     riddle:'I opened on Christmas Day to a crowd of 30,000 people and have never stopped dazzling. My Art Deco grandstand frames the San Gabriel Mountains like a painting. What year did I first open to the public?',
     history:'Santa Anita Park opened December 25, 1934, designed by Gordon Kaufmann in Art Deco and Streamline Moderne styles. It hosted the 1984 Olympic equestrian events and will host again in 2028. Seabiscuit raced here famously in 1940. In 1942, its grounds were used as an assembly center during Japanese American internment — a dark chapter preserved in the museum\'s exhibits.',
     audio:'History of Santa Anita Park', dur:190,
@@ -1385,15 +1457,19 @@ const STOPS = [
     addr:'375 Campus Drive · Zone B (walk from Race Track)',
     zone:'Zone B · Stop 3', icon:'🌿',
     lat:34.137357, lng:-118.042304, radiusM:200,
+    img:'Lucky Baldwin Statue.JPEG',
+    imgCaption:'Lucky Baldwin Statue',
     riddle:'I am a nine-foot-tall pioneer who struck it rich, standing on a teardrop island where no one lives. I look out toward the racetrack gates across the street, forever frozen in a "Dawn in the West." What am I?',
     history:'A Dawn In The West is the title of a 2013 bronze statue by Alfred Paredes of Elias J. Baldwin, pioneer California rancher, and businessman founder.',
     audio:'Lucky Baldwin Legacy', dur:120,
-    ans:'Lucky Baldwin Statue', hint:'Hint: The first mayor of Arcadia.',
+    ans:'Lucky Baldwin', hint:'Hint: The first mayor of Arcadia.',
     clue:'Seek the island green that splits the rushing tides of Huntington and Campus, sitting just a stone\'s throw west of the Arcadia Community Center. I stand tall on a bed of earth where hundreds of roses bloom in the spring, frozen in bronze at the very crossroads of the empire I built.' },
   { id:4, n:'4', name:'LA County Arboretum & Botanic Garden',
     addr:'301 N Baldwin Ave · Zone B (walk from Race Track)',
     zone:'Zone B · Stop 4', icon:'🌿',
     lat:34.1439, lng:-118.0516, radiusM:200,
+    img:'Arboretum.JPG',
+    imgCaption:'Los Angeles County Arboretum',
     riddle:'I am home to descendants of birds that crossed an ocean — brought here by a man who loved collecting living things as much as he loved making money. What country did Lucky Baldwin import the first peafowl from in 1879?',
     history:'The LA County Arboretum spans 127 acres on the former Rancho Santa Anita. Lucky Baldwin imported peafowl from India in 1879, and their descendants still roam freely today. The Queen Anne Cottage on the grounds served as the exterior setting for the TV show Fantasy Island. The Arboretum is open daily 9am–5pm; admission is $18 for adults.',
     audio:'The Arboretum & Lucky Baldwin\'s Legacy', dur:210,
@@ -1403,6 +1479,8 @@ const STOPS = [
     addr:'Inside Arboretum · near Baldwin Lake',
     zone:'Zone B · Stop 5', icon:'🏚',
     lat:34.1406, lng:-118.0531, radiusM:150,
+    img:'Hugo Baldwin Adobe.jpg',
+    imgCaption:'Hugo Reid Adobe',
     riddle:'I am a California Historical Landmark built in 1839. Hugo Reid was a Scotsman who married a Tongva woman named Victoria. He was granted this land by the Mexican government. What was the name of this rancho?',
     history:'Hugo Reid, a Scottish immigrant with Mexican citizenship, married Victoria, a Gabrielino/Tongva woman. In 1839 he was granted Rancho Santa Anita and built this adobe beside Baldwin Lake — one of the oldest standing structures in the San Gabriel Valley and a California Historical Landmark.',
     audio:'Hugo Reid & Rancho Santa Anita', dur:175,
@@ -1412,6 +1490,8 @@ const STOPS = [
     addr:'Huntington Dr & Colorado Place · Zone A',
     zone:'Zone A · Stop 6', icon:'🗿',
     lat:34.1398, lng:-118.0356, radiusM:100,
+    img:'Anita Baldwin Statue.JPEG',
+    imgCaption:'Anita Baldwin Sculpture',
     riddle:'I honor a woman who did something no other woman had done in California — she secured a horse racing license so a new track could be built after her father\'s original burned down. What year did Anita Baldwin receive her racing license?',
     history:'The bronze sculpture "A Legacy of Charity," unveiled October 2021, honors Anita May Baldwin — Lucky Baldwin\'s only daughter. She secured a racing license in 1932, donated land for the new Santa Anita Park, founded the Anita M. Baldwin Hospital for Babies in Los Angeles, and was a pioneering animal welfare advocate whose work helped shape how animals were treated in Hollywood films.',
     audio:'Anita Baldwin — A Legacy of Charity', dur:140,
@@ -1421,6 +1501,8 @@ const STOPS = [
     addr:'405 S Santa Anita Ave · Zone A',
     zone:'Zone A · Stop 7', icon:'🌳',
     lat:34.1385, lng:-118.0320, radiusM:180,
+    img:'Arcadia Vietnam War Monument at Arcadia County Park.JPEG',
+    imgCaption:'Vietnam War Monument at Arcadia County Park',
     riddle:'This park holds two war memorials. "The Hiker" statue honors veterans of a conflict at the turn of the 20th century. The newer memorial was unveiled in 2016 for Arcadia men lost in a war that ended in 1975. How many Arcadia servicemen are named on the Vietnam War Memorial here?',
     history:'Arcadia County Park was built on the former Ross Field, a WWI balloon training base. "The Hiker" bronze statue, installed 1941, honors Spanish-American War veterans — it\'s one of 52 identical castings across the US. The Arcadia Vietnam War Memorial was unveiled May 29, 2016, honoring 14 local men who gave their lives in Vietnam. Entry and parking are always free.',
     audio:'Arcadia County Park & its Memorials', dur:160,
@@ -1430,6 +1512,8 @@ const STOPS = [
     addr:'Huntington Dr, Santa Anita Ave to 2nd Ave',
     zone:'Zone A · Stop 8', icon:'🥇',
     lat:34.1403, lng:-118.0285, radiusM:150,
+    img:'Walk of Champions.JPEG',
+    imgCaption:'Walk of Champions',
     riddle:'The Walk of Champions honors California racing legends with 24×24 inch bronze plaques in the sidewalk. Find the plaque for the mare who won 19 consecutive races — including a historic victory over male horses in the 2009 Breeders\' Cup Classic. What is her name?',
     history:'The Thoroughbred Racing Walk of Champions debuted in 2014, a project of the Arcadia Historical Society. Bronze plaques run along Huntington Drive from Santa Anita Ave east to 2nd Ave, honoring horses, jockeys, trainers, and owners who shaped California racing history across more than a century.',
     audio:'The Walk of Champions Story', dur:120,
@@ -1439,6 +1523,8 @@ const STOPS = [
     addr:'7 E Huntington Dr · Zone A (easternmost stop)',
     zone:'Zone A · Stop 9', icon:'🌀',
     lat:34.1403, lng:-118.0311, radiusM:100,
+    img:'Dennys Windmill.jpg',
+    imgCaption:'Denny\'s Windmill. Copyright John Bare Photography.',
     riddle:'You\'ve reached the easternmost stop! The windmill at this Arcadia Denny\'s is one of the most recognized landmarks in the city. Stand in front of it and count carefully — how many blades does this windmill have?',
     history:'The Arcadia Denny\'s windmill is a beloved local landmark that has anchored this corner for generations. A quirky and iconic piece of Arcadia streetscape history, it marks the end of the eastward leg of the hunt. From here, you head back west along Huntington Drive to the Gilb Museum to complete the Lucky 9 Heritage Hunt.',
     audio:"Arcadia's Iconic Windmill", dur:90,
@@ -1448,6 +1534,8 @@ const STOPS = [
     addr:'380 W Huntington Dr · Hunt Complete',
     zone:'Zone A · Stop 10 (Final)', icon:'🏁',
     lat:34.1319, lng:-118.0429, radiusM:120,
+    img:'Gilb Museum1.jpg',
+    imgCaption:'Gilb Museum',
     riddle:'Welcome back, explorer! You\'ve completed the Arcadia Lucky 9 Heritage Hunt. To receive your official completion certificate from museum staff, tell them the secret completion code — the answer you discovered at your very first stop.',
     history:'Congratulations — you\'ve completed the Arcadia Lucky 9 Heritage Hunt! You\'ve journeyed through 3,000 years of history, from the Tongva village of Aleupkigna through Spanish missions, Mexican ranchos, Lucky Baldwin\'s empire, horse racing glory, wartime sacrifice, and a city\'s enduring pride. Thank you for exploring Arcadia\'s story.',
     audio:'Congratulations — Hunt Complete!', dur:105,
@@ -1832,7 +1920,60 @@ function formatDur(secs) {
   return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
 }
 
+/* ═══════════ VISUAL CLUE ═══════════ */
+// Same convention as audio: the image file is picked from the stop's
+// position in STOPS — ClueImg1.jpg … ClueImg10.jpg, next to index.html.
+// To use a different file for one stop, add  img:'myphoto.png'  to it in STOPS.
+// To add a caption under the image, add  imgCaption:'…'  to that stop.
+const VISUAL_CLUE_PREFIX = 'ClueImg';
+const VISUAL_CLUE_EXT    = '.jpg';
+
+function loadVisualClue(s) {
+  const card    = document.getElementById('visual-card');
+  const img     = document.getElementById('visual-img');
+  const loading = document.getElementById('visual-loading');
+  const caption = document.getElementById('visual-caption');
+  if (!card || !img) return;
+
+  const stopIndex = STOPS.findIndex(x => x.id === s.id) + 1;
+  const imgUrl    = s.img || `${VISUAL_CLUE_PREFIX}${stopIndex}${VISUAL_CLUE_EXT}`;
+
+  // Reset for the new stop
+  card.style.display  = 'block';
+  img.classList.remove('loaded');
+  loading.textContent = 'Loading image…';
+  caption.textContent = s.imgCaption || '';
+  img.alt             = `Visual clue for ${s.name}`;
+
+  img.onload = () => {
+    if (current?.id !== s.id) return;       // user already moved to another stop
+    img.classList.add('loaded');
+  };
+  img.onerror = () => {
+    if (current?.id !== s.id) return;
+    console.warn(`Visual clue not found — check ${imgUrl} is uploaded`);
+    card.style.display = 'none';            // hide the section if the image is missing
+  };
+  img.src = imgUrl;
+}
+
+function openImageViewer() {
+  const img = document.getElementById('visual-img');
+  if (!img || !img.classList.contains('loaded')) return;
+  document.getElementById('img-viewer-img').src = img.src;
+  document.getElementById('img-viewer').classList.add('show');
+}
+
+function closeImageViewer() {
+  document.getElementById('img-viewer').classList.remove('show');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeImageViewer();
+});
+  
 /* ═══════════ HINT ═══════════ */
+  
 function toggleHint() {
   document.getElementById('hint-panel').classList.toggle('show');
 }
