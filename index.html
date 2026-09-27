@@ -1756,6 +1756,7 @@ function openDetail(s) {
   document.getElementById('d-name').textContent     = s.name;
   document.getElementById('d-addr').textContent     = s.addr;
   document.getElementById('d-riddle').textContent   = s.riddle;
+  loadVisualClue(s); 
   document.getElementById('d-history').textContent  = s.history;
   document.getElementById('a-name').textContent     = s.audio;
   document.getElementById('a-meta').textContent     = 'Tap to play';
