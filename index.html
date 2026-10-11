@@ -467,6 +467,13 @@ body {
 .gps-wrap.arrived .gps-title   { color: var(--forest); }
 .gps-sub { font-size: 11px; color: var(--ink-lt); margin-top: 2px; line-height: 1.4; }
 .gps-dist { font-size: 12px; font-weight: 600; color: var(--gold); margin-left: auto; flex-shrink: 0; }
+.gps-actions { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 6px; }
+.gps-link {
+  font-size: 12px; font-weight: 600; color: var(--forest-md);
+  background: none; border: none; padding: 6px 0; cursor: pointer;
+  font-family: 'Jost', sans-serif; text-decoration: underline; text-underline-offset: 2px;
+}
+.gps-link[hidden] { display: none; }
 
 /* Riddle */
 .riddle-card {
@@ -1033,9 +1040,13 @@ body {
       <!-- GPS -->
       <div class="gps-wrap searching" id="gps-card" role="status" aria-live="polite">
         <div class="gps-orb"><div class="gps-pulse"></div></div>
-        <div style="flex:1">
-          <div class="gps-title" id="gps-title">Locating you…</div>
-          <div class="gps-sub" id="gps-sub">Walk to the location to unlock the riddle</div>
+        <div style="flex:1; min-width:0">
+          <div class="gps-title" id="gps-title">Finding your location…</div>
+          <div class="gps-sub" id="gps-sub">Allow location access to see how far you are</div>
+          <div class="gps-actions">
+            <a class="gps-link" id="gps-dir" href="#" target="_blank" rel="noopener">Get directions ↗</a>
+            <button class="gps-link" id="gps-retry" type="button" onclick="retryGPS()" hidden>Try again</button>
+          </div>
         </div>
         <div class="gps-dist" id="gps-dist" aria-label="Distance to stop"></div>
       </div>
@@ -1810,36 +1821,47 @@ function openDetail(s) {
 }
 
 /* ═══════════ GPS ═══════════ */
+// Live distance to the current stop. The riddle is never locked by GPS,
+// so players can still play if location is off or inaccurate.
 function startGPS(s) {
-  setGPS('searching', 'Locating you…', 'Walk to the location to unlock the riddle', '');
-  if (!navigator.geolocation) {
-    setGPS('arrived', 'GPS not available', 'Riddle unlocked — solve it!', '');
+  stopGPS();
+  document.getElementById('gps-dir').href =
+    `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
+  document.getElementById('gps-retry').hidden = true;
+  setGPS('searching', 'Finding your location…', 'Allow location access to see how far you are', '');
+
+  if (!('geolocation' in navigator) || !window.isSecureContext) {
+    setGPS('searching', 'Location not available', 'This browser can\'t share your location. Use directions to find the stop.', '');
     return;
   }
   watchId = navigator.geolocation.watchPosition(
     pos => {
       const dist = haversine(pos.coords.latitude, pos.coords.longitude, s.lat, s.lng);
-      const distStr = dist < 1000 ? Math.round(dist) + ' m away' : (dist/1000).toFixed(1) + ' km away';
+      const ft   = dist * 3.28084;
+      const distStr = ft < 1000 ? Math.round(ft / 10) * 10 + ' ft' : (dist / 1609.34).toFixed(1) + ' mi';
       if (dist <= s.radiusM) {
-        setGPS('arrived', 'You\'re here!', 'Riddle unlocked — look around and solve it!', '');
-        stopGPS();
+        setGPS('arrived', 'You\'re here!', 'Look around and solve the riddle below.', '');
       } else if (dist <= s.radiusM * 3) {
-        setGPS('nearby', 'Getting close…', 'Keep walking toward the location', distStr);
+        setGPS('nearby', 'Almost there', 'Keep going — you\'re close.', distStr);
       } else {
-        setGPS('searching', 'Navigating…', 'Walk toward the location', distStr);
+        setGPS('searching', 'Head to this stop', 'Distance updates as you move.', distStr);
       }
     },
-    () => { setGPS('arrived', 'GPS unavailable', 'Riddle unlocked — solve it!', ''); },
-    { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
-  );
-  // Demo: auto-arrive after 3s for testing without GPS
-  setTimeout(() => {
-    if (gpsState !== 'arrived') {
-      setGPS('arrived', 'You\'re here!', 'Riddle unlocked — solve it!', '');
+    err => {
+      const denied = err.code === 1;
+      setGPS('searching',
+        denied ? 'Location is turned off' : 'Can\'t find your location',
+        denied ? 'Allow location for this site in your browser settings, then tap Try again. You can still solve the riddle.'
+               : 'Move to an open area and tap Try again. You can still solve the riddle.',
+        '');
+      document.getElementById('gps-retry').hidden = false;
       stopGPS();
-    }
-  }, 3000);
+    },
+    { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+  );
 }
+
+function retryGPS() { if (current) startGPS(current); }
 
 function setGPS(state, title, sub, dist) {
   gpsState = state;
@@ -1848,6 +1870,7 @@ function setGPS(state, title, sub, dist) {
   document.getElementById('gps-title').textContent = title;
   document.getElementById('gps-sub').textContent   = sub;
   document.getElementById('gps-dist').textContent  = dist;
+  document.getElementById('gps-dir').hidden = (state === 'arrived');
 }
 
 function stopGPS() {
