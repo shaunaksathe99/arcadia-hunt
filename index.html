@@ -407,8 +407,13 @@ body {
   font-size: 9px; font-weight: 600; letter-spacing: 1.5px;
   text-transform: uppercase; padding: 4px 12px; border-radius: 99px;
   background: rgba(196,146,42,0.15); color: var(--gold);
-  margin-bottom: 12px;
 }
+/* Zone/Stop pill and Back button share one row at the top of each stop page */
+.hero-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 12px;
+}
+.hero-top .back-btn { min-height: 36px; }
 .hero-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 26px; line-height: 1.2; font-weight: 600;
@@ -1015,16 +1020,12 @@ body {
 
 <!-- ════════════ DETAIL ════════════ -->
 <div class="screen" id="scr-detail" role="region" aria-label="Stop detail">
-  <div class="topbar">
-    <div style="flex:1; min-width:0">
-      <div class="tb-title" id="d-tb-title">Stop</div>
-      <div class="tb-sub" id="d-tb-sub">Zone</div>
-    </div>
-    <button class="back-btn" onclick="goScreen('map')" aria-label="Back to route map">← Back</button>
-  </div>
   <div class="scroll padded">
     <div class="detail-hero" id="d-hero">
-      <div class="hero-zone" id="d-zone">Zone A</div>
+      <div class="hero-top">
+        <div class="hero-zone" id="d-zone">Zone A</div>
+        <button class="back-btn" onclick="goScreen('map')" aria-label="Back to route map">← Back</button>
+      </div>
       <h2 class="hero-name" id="d-name">Location</h2>
       <div class="hero-addr" id="d-addr">Address</div>
     </div>
@@ -1775,8 +1776,6 @@ function openDetail(s) {
   resetAudioUI();
   stopGPS();
 
-  document.getElementById('d-tb-title').textContent = s.name;
-  document.getElementById('d-tb-sub').textContent   = s.zone;
   document.getElementById('d-zone').textContent     = s.zone;
   document.getElementById('d-name').textContent     = s.name;
   document.getElementById('d-addr').textContent     = s.addr;
