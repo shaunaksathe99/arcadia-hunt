@@ -1097,9 +1097,16 @@ body {
 </div>
 
 <!-- ════════════ MAP ════════════ -->
+<!-- START: NEW MAP CODE FROM CLAUDE -->
+<!-- ════════════ MAP ════════════ -->
+<!-- Stop order: 1 Gilb Museum (start) → 2 Lucky Baldwin Statue → 3 Anita Baldwin Sculpture →
+     4 Arcadia County Park → 5 Denny's Windmill → 6 Walk of Champions → 7 Santa Anita Park →
+     8 LA County Arboretum → 9 Hugo Reid Adobe → 10 Gilb Museum (finish).
+     Layout is north-up and keeps each stop's real direction from the others; spacing is
+     loosened slightly so markers near each other (Gilb / Lucky Baldwin, Denny's / Walk) stay readable. -->
 <div class="screen" id="scr-map" role="region" aria-label="Route map">
   <div class="topbar">
-    <div><div class="tb-title">Route Map</div><div class="tb-sub">All 9 landmarks · Arcadia, CA</div></div>
+    <div><div class="tb-title">Route Map</div><div class="tb-sub">9 landmarks · Start &amp; finish at Gilb Museum · Arcadia, CA</div></div>
   </div>
   <nav class="bnav" aria-label="Main navigation">
     <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
@@ -1108,91 +1115,121 @@ body {
     <button class="nb" onclick="goScreen('leaderboard')" aria-label="Leaderboard"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Board</button>
     <button class="nb" onclick="goScreen('about')" aria-label="About"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8h.01M12 12v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</button>
   </nav>
-  <div class="map-container" role="img" aria-label="Map of Arcadia showing all 10 scavenger hunt stops">
-    <svg viewBox="0 0 430 290" xmlns="http://www.w3.org/2000/svg">
+  <div class="map-container" role="img" aria-label="Map of Arcadia showing the route: Gilb Museum, Lucky Baldwin Statue, Anita Baldwin Sculpture, Arcadia County Park, Denny's Windmill, Walk of Champions, Santa Anita Park, LA County Arboretum, Hugo Reid Adobe, and back to Gilb Museum">
+    <svg viewBox="0 0 430 290" xmlns="http://www.w3.org/2000/svg" font-family="Jost,sans-serif">
       <!-- ── Background: Arcadia green ── -->
       <rect width="430" height="290" fill="#006940"/>
 
-      <!-- ── Zone shading ── -->
-      <rect x="0" y="0" width="160" height="290" fill="#003060" opacity="0.35"/>
-      <rect x="160" y="0" width="270" height="290" fill="#001830" opacity="0.15"/>
-
-      <!-- ── Zone label pills ── -->
-      <rect x="8" y="8" width="76" height="24" rx="12" fill="#00345B"/>
-      <text x="46" y="24" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="Jost,sans-serif" letter-spacing="0.8">ZONE B</text>
-      <rect x="195" y="8" width="76" height="24" rx="12" fill="white" stroke="#00345B" stroke-width="2.5"/>
-      <text x="233" y="24" text-anchor="middle" font-size="10" fill="#00345B" font-weight="700" font-family="Jost,sans-serif" letter-spacing="0.8">ZONE A</text>
+      <!-- ── Area shading (context only) ── -->
+      <!-- LA County Arboretum grounds (west of Baldwin Ave) -->
+      <rect x="8" y="40" width="108" height="150" rx="14" fill="#0B7A4D" stroke="#2E9466" stroke-width="1"/>
+      <!-- Arcadia County Park (SW corner of Huntington & Santa Anita) -->
+      <rect x="294" y="180" width="44" height="44" rx="8" fill="#0B7A4D" stroke="#2E9466" stroke-width="1"/>
 
       <!-- ── Roads ── -->
-      <rect x="0" y="136" width="430" height="10" fill="#E8E2CC" opacity="0.95"/>
-      <text x="8" y="132" font-size="7.5" fill="rgba(255,255,255,0.85)" font-family="Jost,sans-serif" font-weight="600">Huntington Dr</text>
-      <rect x="148" y="0" width="9" height="290" fill="#E8E2CC" opacity="0.75"/>
-      <rect x="286" y="0" width="9" height="290" fill="#E8E2CC" opacity="0.6"/>
-
-      <!-- ── Zone divider ── -->
-      <line x1="158" y1="0" x2="158" y2="290" stroke="white" stroke-width="1.2" stroke-dasharray="5,5" opacity="0.35"/>
+      <!-- Baldwin Ave -->
+      <rect x="119" y="0" width="7" height="290" fill="#E8E2CC" opacity="0.55"/>
+      <!-- Santa Anita Ave -->
+      <rect x="339" y="0" width="7" height="290" fill="#E8E2CC" opacity="0.55"/>
+      <!-- Huntington Dr (main road, bends northeast toward downtown) -->
+      <polyline points="0,252 122,250 195,240 250,192 300,166 342,160 430,152"
+        fill="none" stroke="#E8E2CC" stroke-width="10" stroke-linejoin="round" opacity="0.95"/>
+      <!-- Road labels -->
+      <text x="8" y="243" font-size="8" fill="white" font-weight="600" opacity="0.9">Huntington Dr</text>
+      <text transform="translate(134 236) rotate(-90)" font-size="7.5" fill="white" font-weight="600" opacity="0.8">Baldwin Ave</text>
+      <text transform="translate(337 86) rotate(-90)" font-size="7.5" fill="white" font-weight="600" opacity="0.8">Santa Anita Ave</text>
 
       <!-- ── Route lines ── -->
-      <!-- Zone A walking route: gold dashed -->
-      <polyline points="215,141 257,141 295,141 345,141 400,141"
-        fill="none" stroke="#C39909" stroke-width="3" stroke-dasharray="8,4" opacity="1"/>
-      <!-- Zone B driving route: white dashed (Gilb → 2 → 3 → 4 → 5) -->
-      <polyline points="215,141 152,141 152,58 128,58 90,98 52,58 28,104"
-        fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.7"/>
+      <!-- Zone A walking leg (gold): G → 2 → 3 → 4 → 5 → 6 -->
+      <polyline points="195,240 148,268 195,240 250,192 282,140 318,206 365,112 406,150"
+        fill="none" stroke="#E0B21A" stroke-width="3" stroke-dasharray="8,4" stroke-linejoin="round"/>
+      <!-- Zone B driving leg (white): 6 → 7 → 8 → 9 → G, following Huntington & Baldwin -->
+      <polyline points="406,154 342,164 300,170 254,196 205,128 100,72 48,150 122,172 122,254 195,244"
+        fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="6,4" stroke-linejoin="round" opacity="0.85"/>
 
-      <!-- ══ ZONE B STOPS — Navy fill #00345B, white text ══ -->
-      <!-- Rule: the number's x = circle's cx, and its y = cy + 5 (r14) or cy + 6 (r17) -->
+      <!-- ── Zone pills ── -->
+      <rect x="8" y="8" width="96" height="22" rx="11" fill="#00345B"/>
+      <text x="56" y="23" text-anchor="middle" font-size="9.5" fill="white" font-weight="700" letter-spacing="0.6">ZONE B · 7–9</text>
+      <rect x="236" y="8" width="96" height="22" rx="11" fill="white" stroke="#00345B" stroke-width="2"/>
+      <text x="284" y="23" text-anchor="middle" font-size="9.5" fill="#00345B" font-weight="700" letter-spacing="0.6">ZONE A · 2–6</text>
 
-      <!-- Stop 2: Race Track -->
-      <circle cx="128" cy="58" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
-      <text x="128" y="64" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">2</text>
-      <text x="128" y="84" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Race Track</text>
+      <!-- ── Compass ── -->
+      <g aria-hidden="true">
+        <circle cx="410" cy="22" r="13" fill="#00345B" stroke="white" stroke-width="2"/>
+        <path d="M410 12 L414 25 L410 23 L406 25 Z" fill="#E0B21A"/>
+        <text x="410" y="32" text-anchor="middle" font-size="6" fill="white" font-weight="700">N</text>
+      </g>
 
-      <!-- Stop 3: Lucky Baldwin Statue -->
-      <circle cx="90" cy="98" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
-      <text x="90" y="104" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">3</text>
-      <text x="90" y="124" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Baldwin Statue</text>
+      <!-- ══ STOPS ══ -->
+      <!-- Rule: number x = cx, number y = cy + 4 (r13, font-size 11) -->
+      <!-- Labels use a green halo (paint-order stroke) so they stay legible over route lines -->
 
-      <!-- Stop 4: Arboretum -->
-      <circle cx="52" cy="58" r="17" fill="#00345B" stroke="white" stroke-width="3"/>
-      <text x="52" y="64" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="Jost,sans-serif">4</text>
-      <text x="52" y="84" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Arboretum</text>
+      <!-- ══ GILB MUSEUM — Stop 1 & 10, Red #A41E22 ══ -->
+      <circle cx="195" cy="240" r="24" fill="#A41E22" opacity="0.3"/>
+      <circle cx="195" cy="240" r="19" fill="#A41E22" stroke="white" stroke-width="3"/>
+      <text x="195" y="245" text-anchor="middle" font-size="13" fill="white" font-weight="700">G</text>
+      <g font-weight="700" fill="white" stroke="#006940" stroke-width="3" paint-order="stroke" stroke-linejoin="round">
+        <text x="222" y="245" font-size="9">GILB MUSEUM</text>
+        <text x="222" y="256" font-size="7.5" font-weight="500">Start &amp; Finish (1 &amp; 10)</text>
+      </g>
 
-      <!-- Stop 5: Hugo Reid Adobe -->
-      <circle cx="28" cy="104" r="14" fill="#00345B" stroke="white" stroke-width="2.5"/>
-      <text x="28" y="109" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="Jost,sans-serif">5</text>
-      <text x="28" y="128" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.9)" font-family="Jost,sans-serif" font-weight="600">Hugo Reid</text>
-      <!-- ══ GILB MUSEUM — Red #A41E22, unmistakable ══ -->
-      <circle cx="215" cy="141" r="26" fill="#A41E22" opacity="0.3"/>
-      <circle cx="215" cy="141" r="21" fill="#A41E22" stroke="white" stroke-width="3.5"/>
-      <circle cx="215" cy="141" r="15" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-      <text x="215" y="147" text-anchor="middle" font-size="13" fill="white" font-weight="700" font-family="Jost,sans-serif">G</text>
-      <text x="215" y="174" text-anchor="middle" font-size="7.5" fill="white" font-weight="700" font-family="Jost,sans-serif">GILB MUSEUM</text>
-      <text x="215" y="185" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.8)" font-family="Jost,sans-serif">Start &amp; Finish</text>
+      <!-- ══ ZONE A STOPS — White fill, navy ring #00345B, navy number ══ -->
+      <g font-size="11" font-weight="700" text-anchor="middle" fill="#00345B">
+        <!-- Stop 2: Lucky Baldwin Statue -->
+        <circle cx="148" cy="268" r="13" fill="white" stroke="#00345B" stroke-width="3"/>
+        <text x="148" y="272">2</text>
+        <!-- Stop 3: Anita Baldwin Sculpture (Le Méridien) -->
+        <circle cx="282" cy="140" r="13" fill="white" stroke="#00345B" stroke-width="3"/>
+        <text x="282" y="144">3</text>
+        <!-- Stop 4: Arcadia County Park -->
+        <circle cx="318" cy="206" r="13" fill="white" stroke="#00345B" stroke-width="3"/>
+        <text x="318" y="210">4</text>
+        <!-- Stop 5: Denny's Windmill -->
+        <circle cx="365" cy="112" r="13" fill="white" stroke="#00345B" stroke-width="3"/>
+        <text x="365" y="116">5</text>
+        <!-- Stop 6: Walk of Champions -->
+        <circle cx="406" cy="150" r="13" fill="white" stroke="#00345B" stroke-width="3"/>
+        <text x="406" y="154">6</text>
+      </g>
 
-      <!-- ══ ZONE A STOPS — White fill, navy perimeter #00345B, navy number ══ -->
+      <!-- ══ ZONE B STOPS — Navy fill #00345B, white ring, white number ══ -->
+      <g font-size="11" font-weight="700" text-anchor="middle" fill="white">
+        <!-- Stop 7: Santa Anita Park (Race Track) -->
+        <circle cx="205" cy="128" r="13" fill="#00345B" stroke="white" stroke-width="3"/>
+        <text x="205" y="132">7</text>
+        <!-- Stop 8: LA County Arboretum -->
+        <circle cx="100" cy="72" r="13" fill="#00345B" stroke="white" stroke-width="3"/>
+        <text x="100" y="76">8</text>
+        <!-- Stop 9: Hugo Reid Adobe -->
+        <circle cx="48" cy="150" r="13" fill="#00345B" stroke="white" stroke-width="3"/>
+        <text x="48" y="154">9</text>
+      </g>
 
-      <!-- Stop 6: Anita Baldwin Sculpture -->
-      <circle cx="257" cy="141" r="14" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="257" y="146" text-anchor="middle" font-size="10" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">6</text>
-      <text x="257" y="163" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">A. Baldwin</text>
+      <!-- ── Stop labels ── -->
+      <g font-size="9" font-weight="600" fill="white" stroke="#006940" stroke-width="3" paint-order="stroke" stroke-linejoin="round">
+        <text x="130" y="272" text-anchor="end">Lucky Baldwin Statue</text>
+        <text x="282" y="120" text-anchor="middle">Anita Baldwin Sculpture</text>
+        <text x="318" y="233" text-anchor="middle">County Park</text>
+        <text x="365" y="92" text-anchor="middle">Denny's Windmill</text>
+        <text x="424" y="177" text-anchor="end">Walk of Champions</text>
+        <text x="205" y="108" text-anchor="middle">Santa Anita Park</text>
+        <text x="100" y="52" text-anchor="middle">LA Arboretum</text>
+        <text x="48" y="174" text-anchor="middle">Hugo Reid Adobe</text>
+      </g>
 
-      <!-- Stop 7: County Park -->
-      <circle cx="295" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="295" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">7</text>
-      <text x="295" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">County Park</text>
+      <!-- ── Legend ── -->
+      <g font-size="8" font-weight="600" fill="white">
+        <line x1="262" y1="262" x2="286" y2="262" stroke="#E0B21A" stroke-width="3" stroke-dasharray="8,4"/>
+        <text x="292" y="265">Zone A · walk</text>
+        <line x1="262" y1="278" x2="286" y2="278" stroke="white" stroke-width="2.5" stroke-dasharray="6,4"/>
+        <text x="292" y="281">Zone B · drive</text>
+      </g>
+    </svg>
+  </div>
+</div>
 
-      <!-- Stop 8: Walk of Champions -->
-      <circle cx="345" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="345" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">8</text>
-      <text x="345" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">Walk/Champs</text>
-
-      <!-- Stop 9: Denny's Windmill -->
-      <circle cx="400" cy="141" r="17" fill="white" stroke="#00345B" stroke-width="3"/>
-      <text x="400" y="147" text-anchor="middle" font-size="11" fill="#00345B" font-weight="700" font-family="Jost,sans-serif">9</text>
-      <text x="400" y="167" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.95)" font-family="Jost,sans-serif" font-weight="600">Denny's</text>
-
-
+<!-- END: NEW MAP CODE FROM CLAUDE -->
+  
       <!-- ── Compass rose ── -->
       <g transform="translate(398,243)">
         <circle r="17" fill="rgba(0,52,91,0.85)" stroke="white" stroke-width="1.5"/>
@@ -1219,19 +1256,19 @@ body {
       </div>
       <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Gilb Museum (Start/Finish)</span>
     </div>
-    <!-- Zone B -->
-    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
-      <div style="width:22px;height:22px;border-radius:50%;background:#00345B;border:3px solid white;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:9px;font-weight:700;color:white;font-family:Jost,sans-serif;">B</span>
-      </div>
-      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Zone B stops (drive)</span>
-    </div>
     <!-- Zone A -->
     <div role="listitem" style="display:flex;align-items:center;gap:8px;">
       <div style="width:22px;height:22px;border-radius:50%;background:white;border:3px solid #00345B;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
         <span style="font-size:9px;font-weight:700;color:#00345B;font-family:Jost,sans-serif;">A</span>
       </div>
-      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Zone A stops (walk)</span>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Zone A stops (mostly walking between stops)</span>
+    </div>
+    <!-- Zone B -->
+    <div role="listitem" style="display:flex;align-items:center;gap:8px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:#00345B;border:3px solid white;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:9px;font-weight:700;color:white;font-family:Jost,sans-serif;">B</span>
+      </div>
+      <span style="font-size:13px;font-weight:600;color:white;font-family:Jost,sans-serif;">Zone B stops (mostly driving between stops)</span>
     </div>
     <!-- Walking route -->
     <div role="listitem" style="display:flex;align-items:center;gap:8px;">
