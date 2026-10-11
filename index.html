@@ -613,13 +613,17 @@ body {
 }
 .hint-panel.show { display: block; }
 
+/* Answer field + Submit share one row to save vertical space on phones */
+.answer-row {
+  display: flex; gap: 8px; align-items: stretch;
+}
 .answer-input {
-  width: 100%; padding: 15px 16px;
+  flex: 1; min-width: 0; width: auto; min-height: 50px; padding: 12px 14px;
   border: 2px solid var(--cream-dk);
   border-radius: var(--r-sm);
   font-size: 16px; font-family: 'Jost', sans-serif;
   background: var(--cream-md); color: var(--ink);
-  outline: none; margin-bottom: 12px;
+  outline: none; margin: 0;
   transition: border-color 0.2s;
   -webkit-appearance: none;
 }
@@ -632,7 +636,8 @@ body {
 }
 
 .submit-btn {
-  width: 100%; padding: 17px;
+  flex: none; min-width: 104px; min-height: 50px; padding: 0 18px;
+  white-space: nowrap;
   background: var(--forest); color: var(--gold);
   border: none; border-radius: var(--r-sm);
   font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
@@ -1076,10 +1081,12 @@ body {
           <button class="hint-btn" onclick="toggleHint()" aria-label="Show hint">Show hint</button>
         </div>
         <div class="hint-panel" id="hint-panel" role="note" aria-label="Hint"></div>
-        <input class="answer-input" id="answer-inp" placeholder="Type your answer…"
-               autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="none"
-               aria-label="Your answer to the riddle"/>
-        <button class="submit-btn" id="sub-btn" onclick="checkAnswer()" aria-label="Submit your answer">Submit answer →</button>
+        <div class="answer-row">
+          <input class="answer-input" id="answer-inp" placeholder="Type your answer…"
+                 autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="none"
+                 enterkeyhint="go" aria-label="Your answer to the riddle"/>
+          <button class="submit-btn" id="sub-btn" onclick="checkAnswer()" aria-label="Submit your answer">Submit →</button>
+        </div>
         <div class="clue-reveal" id="clue-box" role="region" aria-label="Next clue" aria-live="polite">
           <div class="card-eye sage">Next clue unlocked</div>
           <div class="clue-body" id="clue-txt">…</div>
@@ -1784,7 +1791,7 @@ function openDetail(s) {
   document.getElementById('clue-txt').textContent   = s.clue;
   document.getElementById('answer-inp').value       = '';
   document.getElementById('answer-inp').className   = 'answer-input';
-  document.getElementById('sub-btn').textContent    = 'Submit answer →';
+  document.getElementById('sub-btn').textContent    = 'Submit →';
   document.getElementById('sub-btn').className      = 'submit-btn';
 
   const isDone = done.has(s.id);
@@ -2014,7 +2021,7 @@ function checkAnswer() {
 
   if (correct) {
     field.className = 'answer-input ok';
-    btn.textContent = '✓ Correct!';
+    btn.textContent = '✓ Correct';
     btn.className   = 'submit-btn ok';
     document.getElementById('clue-box').classList.add('show');
     done.add(current.id);
@@ -2032,12 +2039,13 @@ function checkAnswer() {
     }, 600);
   } else {
     field.className = 'answer-input err';
-    btn.textContent = '✗ Not quite — try again';
+    btn.textContent = 'Try again';
     btn.className   = 'submit-btn err';
+    toast('Not quite — try again');
     setTimeout(() => {
       field.className = 'answer-input';
       btn.className   = 'submit-btn';
-      btn.textContent = 'Submit answer →';
+      btn.textContent = 'Submit →';
     }, 1800);
   }
 }
