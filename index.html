@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Explore Arcadia's history through the Lucky 9 Heritage Hunt — 9 stops, ~4 miles, ~2 hours. Visit 9 historic landmarks, solve riddles, and discover the stories that built this city.">
+<meta name="description" content="Explore Arcadia's history through the Lucky 9 Heritage Hunt — 9 landmarks, ~4 miles, ~2 hours. Visit 9 historic landmarks, solve riddles, and discover the stories that built this city.">
 <meta name="theme-color" content="#0F1F0F">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -70,7 +70,8 @@
   window._saveStopToFirestore = async (stopId, stopName) => {
     if (!userId) return;
     if (!huntStartTime) huntStartTime = new Date();
-    const isComplete = window._done.size >= 9; // 9 outdoor stops
+    const totalStops = (typeof STOPS !== 'undefined') ? STOPS.length : 10;
+    const isComplete = window._done.size >= totalStops; // all stops, ending back at the Gilb Museum
 
     try {
       await setDoc(doc(db, 'users', userId), {
@@ -88,11 +89,34 @@
           userId,
           completedAt:  serverTimestamp(),
           elapsedSecs:  elapsed,
-          displayName:  'Explorer',
+          displayName:  window._getPlayerName() || 'Explorer',
+          ...window._getPlayerPlace(),
         }, { merge: true });
         window._loadLeaderboard();
       }
     } catch(e) { console.warn('Firestore save failed:', e); }
+  };
+
+  // ── Reset this device's saved progress (used by the Reset button) ──
+  window._resetFirestoreProgress = async () => {
+    huntStartTime = null;
+    if (!userId) return;
+    try {
+      await setDoc(doc(db, 'users', userId), {
+        completedStops: [], huntStartTime: null, huntComplete: false,
+        completedAt: null, lastUpdated: serverTimestamp(),
+      }, { merge: true });
+    } catch(e) { console.warn('Could not reset Firestore progress:', e); }
+  };
+
+  // ── Save the player's leaderboard name (first name + last initial) ──
+  window._saveLeaderboardName = async (displayName, city, state) => {
+    if (!userId) return false;
+    try {
+      await setDoc(doc(db, 'leaderboard', userId), { displayName, city, state }, { merge: true });
+      window._loadLeaderboard();
+      return true;
+    } catch(e) { console.warn('Could not save name:', e); return false; }
   };
 
   // ── Load leaderboard ────────────────────────────────────────
@@ -859,6 +883,24 @@ body {
   font-family: 'Jost', sans-serif; cursor: pointer;
 }
 .modal-cta:active { opacity: 0.85; }
+.lb-form { text-align: left; margin: -12px 0 14px; }
+.modal-sheet { max-height: 92vh; overflow-y: auto; }
+.lb-form[hidden] { display: none; }
+.lb-form-title { font-size: 13px; font-weight: 600; color: var(--forest); margin-bottom: 10px; text-align: center; }
+.lb-form-row { display: flex; gap: 10px; margin-bottom: 8px; }
+.lb-field { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.lb-field-sm { flex: 0 0 96px; }
+.lb-field label { font-size: 11px; font-weight: 600; color: var(--ink-mid); letter-spacing: 0.3px; }
+.lb-field input, .lb-field select {
+  width: 100%; min-height: 48px; padding: 10px 12px; font-size: 16px;
+  font-family: 'Jost', sans-serif; color: var(--ink);
+  background: var(--cream-md); border: 2px solid var(--cream-dk); border-radius: var(--r-sm);
+  outline: none; -webkit-appearance: none;
+}
+.lb-field input:focus, .lb-field select:focus { border-color: var(--forest-lt); }
+.lb-form-note { font-size: 11px; color: var(--ink-lt); line-height: 1.5; margin-bottom: 12px; }
+.lb-form .modal-cta { margin-bottom: 0; }
+.modal-cta.secondary { background: none; color: var(--ink-lt); border: 1.5px solid var(--cream-dk); }
 
 /* ═══════════════ TOAST ═══════════════ */
 .toast {
@@ -972,7 +1014,7 @@ body {
   <div class="scroll padded">
     <!-- Progress strip -->
     <div class="prog-strip" role="progressbar" aria-label="Hunt progress" style="margin:0;padding:12px 20px 16px;">
-      <div class="prog-row"><span>Your progress</span><strong id="h-prog-txt">0 of 9 stops</strong></div>
+      <div class="prog-row"><span>Your progress</span><strong id="h-prog-txt">0 of 9 landmarks</strong></div>
       <div class="prog-track"><div class="prog-fill" id="h-prog-fill" style="width:0%"></div></div>
     </div>
     <!-- Welcome card -->
@@ -1188,7 +1230,7 @@ body {
       <text x="195" y="245" text-anchor="middle" font-size="13" fill="white" font-weight="700">G</text>
       <g font-weight="700" fill="white" stroke="#006940" stroke-width="3" paint-order="stroke" stroke-linejoin="round">
         <text x="222" y="245" font-size="9">GILB MUSEUM</text>
-        <text x="222" y="256" font-size="7.5" font-weight="500">Start &amp; Finish (1 &amp; 10)</text>
+        <text x="222" y="256" font-size="7.5" font-weight="500">Start &amp; Finish</text>
       </g>
 
       <!-- ══ ZONE A STOPS — White fill, navy ring #00345B, navy number ══ -->
@@ -1288,7 +1330,7 @@ body {
 <!-- ════════════ PROGRESS ════════════ -->
 <div class="screen" id="scr-progress" role="region" aria-label="Your progress">
   <div class="topbar">
-    <div><div class="tb-title">Your Progress</div><div class="tb-sub" id="prog-sub">0 of 9 stops completed</div></div>
+    <div><div class="tb-title">Your Progress</div><div class="tb-sub" id="prog-sub">0 of 9 landmarks visited</div></div>
   </div>
   <nav class="bnav" aria-label="Main navigation">
     <button class="nb" onclick="goScreen('home')" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3l9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Home</button>
@@ -1307,7 +1349,7 @@ body {
           id="prog-arc" style="transition:stroke-dashoffset 0.9s cubic-bezier(.4,0,.2,1)"/>
       </svg>
       <div class="ring-pct-lbl" id="ring-pct" aria-live="polite">0%</div>
-      <div class="ring-sub-lbl" id="ring-lbl">0 of 9 stops done</div>
+      <div class="ring-sub-lbl" id="ring-lbl">0 of 9 landmarks</div>
     </div>
     <div class="sec-lbl">Stop by stop</div>
     <div id="prog-list" role="list"></div>
@@ -1331,12 +1373,12 @@ body {
     <div class="about-hero">
       <div class="hero-zone">Eagle Scout Service Project</div>
       <div class="about-title">Arcadia Lucky 9 Heritage Hunt</div>
-      <div class="about-sub">9 stops · ~4 miles · ~2 hours · Free — a self-guided historic hunt through Arcadia, California.</div>
+      <div class="about-sub">9 landmarks · ~4 miles · ~2 hours · Free — a self-guided historic hunt through Arcadia, California.</div>
     </div>
     <div class="about-body">
       <div class="about-section-title">About the project</div>
       <p class="about-p">The Arcadia Lucky 9 Heritage Hunt is an Eagle Scout Service Project designed to make Arcadia's rich history accessible and engaging for residents, visitors, families, and students of all ages.</p>
-      <p class="about-p">Participants visit 10 historic landmarks across the city, listen to narrated audio guides, solve riddles tied to each location's real history, and collect clues that lead them to the next stop — all without needing a tour guide.</p>
+      <p class="about-p">Participants visit 9 historic landmarks across the city, starting and finishing at the Gilb Museum, listen to narrated audio guides, solve riddles tied to each location's real history, and collect clues that lead them to the next stop — all without needing a tour guide.</p>
       <p class="about-p">The hunt exists in two formats: this digital app, and a printed booklet available at the Gilb Museum for those who prefer a non-digital experience or want a keepsake souvenir.</p>
 
       <div class="about-section-title">Our beneficiary</div>
@@ -1390,7 +1432,7 @@ body {
     <div style="padding:20px 20px 8px">
       <div style="background:var(--forest);border-radius:var(--r);padding:18px 20px;margin-bottom:20px;">
         <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);margin-bottom:6px;">Top Explorers</div>
-        <div style="font-size:12px;color:rgba(248,244,236,0.5);line-height:1.6;">Ranked by total time from first stop to completing all 9 outdoor stops. Finish the hunt to appear here!</div>
+        <div style="font-size:12px;color:rgba(248,244,236,0.5);line-height:1.6;">Ranked by total time from your first stop to finishing back at the Gilb Museum. Finish the hunt to add your name!</div>
       </div>
     </div>
     <div id="leaderboard-list" style="padding:0 20px">
@@ -1456,7 +1498,85 @@ body {
     <div class="modal-glyph" id="modal-glyph" aria-hidden="true">🗺️</div>
     <div class="modal-title" id="modal-title">Stop complete!</div>
     <div class="modal-body" id="modal-body">Next stop revealed.</div>
-    <button class="modal-cta" onclick="closeModal()">Continue Hunt →</button>
+    <form class="lb-form" id="lb-form" hidden onsubmit="event.preventDefault(); submitLeaderboardName();">
+      <div class="lb-form-title">Add your name to the leaderboard</div>
+      <div class="lb-form-row">
+        <div class="lb-field">
+          <label for="lb-first">First name</label>
+          <input id="lb-first" type="text" maxlength="20" autocomplete="given-name" required>
+        </div>
+        <div class="lb-field lb-field-sm">
+          <label for="lb-last">Last initial</label>
+          <input id="lb-last" type="text" maxlength="1" autocomplete="off" autocapitalize="characters" required>
+        </div>
+      </div>
+      <div class="lb-form-row">
+        <div class="lb-field">
+          <label for="lb-city">City</label>
+          <input id="lb-city" type="text" maxlength="30" autocomplete="address-level2" required>
+        </div>
+        <div class="lb-field lb-field-sm">
+          <label for="lb-state">State</label>
+          <select id="lb-state" autocomplete="address-level1" required>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AZ">AZ</option>
+            <option value="AR">AR</option>
+            <option value="CA" selected>CA</option>
+            <option value="CO">CO</option>
+            <option value="CT">CT</option>
+            <option value="DE">DE</option>
+            <option value="DC">DC</option>
+            <option value="FL">FL</option>
+            <option value="GA">GA</option>
+            <option value="HI">HI</option>
+            <option value="ID">ID</option>
+            <option value="IL">IL</option>
+            <option value="IN">IN</option>
+            <option value="IA">IA</option>
+            <option value="KS">KS</option>
+            <option value="KY">KY</option>
+            <option value="LA">LA</option>
+            <option value="ME">ME</option>
+            <option value="MD">MD</option>
+            <option value="MA">MA</option>
+            <option value="MI">MI</option>
+            <option value="MN">MN</option>
+            <option value="MS">MS</option>
+            <option value="MO">MO</option>
+            <option value="MT">MT</option>
+            <option value="NE">NE</option>
+            <option value="NV">NV</option>
+            <option value="NH">NH</option>
+            <option value="NJ">NJ</option>
+            <option value="NM">NM</option>
+            <option value="NY">NY</option>
+            <option value="NC">NC</option>
+            <option value="ND">ND</option>
+            <option value="OH">OH</option>
+            <option value="OK">OK</option>
+            <option value="OR">OR</option>
+            <option value="PA">PA</option>
+            <option value="RI">RI</option>
+            <option value="SC">SC</option>
+            <option value="SD">SD</option>
+            <option value="TN">TN</option>
+            <option value="TX">TX</option>
+            <option value="UT">UT</option>
+            <option value="VT">VT</option>
+            <option value="VA">VA</option>
+            <option value="WA">WA</option>
+            <option value="WV">WV</option>
+            <option value="WI">WI</option>
+            <option value="WY">WY</option>
+            <option value="Intl">Outside US</option>
+          </select>
+        </div>
+      </div>
+      <div class="lb-form-note">Your first name, last initial, city and state are shown with the date you finished, and used for your completion certificate.</div>
+      <button class="modal-cta" type="submit" id="lb-save">Save to leaderboard</button>
+    </form>
+    <button class="modal-cta" id="modal-continue" onclick="closeModal()">Continue Hunt →</button>
   </div>
 </div>
 
@@ -1572,9 +1692,9 @@ const STOPS = [
     audio:'Hugo Reid & Rancho Santa Anita', dur:175,
     ans:'rancho santa anita', hint:'Hint: The rancho shares its name with the racetrack and the arboretum.',
     clue:'Still inside the Arboretum — find the oldest structure here, a modest adobe built beside the lake in 1839 by its first private owner.' },
-  { id:10, n:'10', name:'Gilb Museum — Final Stop',
+  { id:10, n:'🏁', finish:true, name:'Gilb Museum — Finish',
     addr:'380 W Huntington Dr · Hunt Complete',
-    zone:'Zone A · Stop 10 (Final)', icon:'🏁',
+    zone:'Finish · Back at the Gilb Museum', icon:'🏁',
     lat:34.1323, lng:-118.0450, radiusM:200,
     img:'ClueImg10.jpg',
     imgCaption:'Gilb Museum',
@@ -1648,11 +1768,10 @@ function goScreen(name) {
 /* ═══════════ HOME ═══════════ */
 function buildHome() {
   // Home screen no longer shows stop list — just update progress bar
-  const total = STOPS.length;
-  const cnt   = Math.min(done.size, total);
+  const { total, cnt, finished } = landmarkProgress();
   const progTxt  = document.getElementById('h-prog-txt');
   const progFill = document.getElementById('h-prog-fill');
-  if (progTxt)  progTxt.textContent  = `${cnt} of ${total} stops`;
+  if (progTxt)  progTxt.textContent  = finished ? 'Hunt complete!' : `${cnt} of ${total} landmarks`;
   if (progFill) progFill.style.width = `${(cnt/total)*100}%`;
 }
 
@@ -2053,6 +2172,7 @@ function checkAnswer() {
       const remaining = STOPS.filter(s => !done.has(s.id));
       const isLast    = done.size >= STOPS.length;
       document.getElementById('modal-glyph').textContent = isLast ? '🏆' : '🗺️';
+      showNameForm(isLast);
       document.getElementById('modal-title').textContent = isLast ? 'Hunt complete!' : `Stop ${current.n} done!`;
       document.getElementById('modal-body').textContent  = isLast
         ? 'You\'ve completed the Arcadia Lucky 9 Heritage Hunt! Return to the Gilb Museum to claim your completion certificate.'
@@ -2076,13 +2196,149 @@ document.getElementById('answer-inp').addEventListener('keydown', e => {
   if (e.key === 'Enter') checkAnswer();
 });
 
+/* ═══════════ NAME FILTER ═══════════ */
+// Blocks swear words, slurs and sexual terms in leaderboard names, including
+// look-alike spellings (sh1t, f.u.c.k, @$$), sound-alikes (phuck, fuq, biatch)
+// and stretched letters (fuuuck). It runs in the browser, so it stops normal
+// players; anything that slips through can still be deleted in Firebase.
+const NAME_FILTER = (() => {
+  // Blocked anywhere inside a name (distinctive enough not to hit real names)
+  const PART = ['fuck','fuk','fuq','phuk','motherfuck','shit','bitch','biatch','biotch','beyotch',
+    'cunt','nigger','nigga','niglet','faggot','fagot','whore','slut','asshole','dumbass','jackass',
+    'smartass','fatass','badass','asswipe','asshat','dickhead','dickface','cocksuck','cockhead',
+    'pussy','pussies','penis','vagina','boob','titties','tittie','porn','rapist','retard','bastard',
+    'bollock','wanker','wank','douche','dildo','jizz','horny','blowjob','handjob','butthole',
+    'buttplug','motherfucker','shithead','bullshit','goddamn','dammit','damnit','piss','nazi',
+    'hitler','wetback','towelhead','raghead','tranny','beaner','skank','hooker','stripper',
+    'orgasm','masturbat','ejaculat','erection','testicle','scrotum','clitoris','anal','felch',
+    'spunk','queef','smegma','numbnut','dipshit','shitface','fuckface','arsehole','twat','pecker',
+    'knob','minge','shag','sodom','incest','pedo','paedo','molest','killyourself','kys'];
+  // Blocked only as a whole word (short words that appear inside real names)
+  const WORD = ['ass','arse','azz','dick','dik','cock','cok','kok','tit','tits','sex','sexy','rape',
+    'cum','semen','hell','damn','crap','prick','fag','homo','dyke','coon','spic','chink','kike',
+    'gook','hoe','thot','butt','anus','fanny','bugger','wtf','stfu','gtfo','mofo','mf','fu','fk',
+    'fck','sht','btch','bish','feck','fook','fawk','fack','phuc','nob','turd','poop','pee','puta',
+    'putain','merde','scheisse','mierda','pendejo','cabron','chingada','verga','culo','perra',
+    'zorra','puto','joto','maricon','vaffanculo','cazzo','stronzo','kurwa','blyat','suka'];
+  // Real names that would otherwise be caught by the rules above. Add more here if needed.
+  const ALLOW = ['shital','shitij','shitanshu','dickson','dickens','cassius','hancock','sexton',
+    'analise','analisa','analia','anala','hassan','cassandra','cass','knobel','assunta','glasser',
+    'duck','dakota','sheetal','shiti'];
+  const LEET = {'0':'o','1':'i','!':'i','|':'i','3':'e','4':'a','@':'a','5':'s','$':'s','7':'t',
+    '+':'t','8':'b','9':'g','€':'e','£':'l','¡':'i'};
+  // Spelling -> rough sound: phuck=fuck, fuq=fuk, kunt=cunt, azz=ass, shyt=shit, fvck=fuck
+  function norm(v) {
+    let t = String(v || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    t = [...t].map(ch => LEET[ch] || ch).join('').replace(/[^a-z]/g, '');
+    t = t.replace(/ph/g,'f').replace(/ck/g,'k').replace(/q/g,'k').replace(/x/g,'ks')
+         .replace(/z/g,'s').replace(/y/g,'i').replace(/v/g,'u').replace(/c(?!h)/g,'k')
+         .replace(/(.)\1+/g,'$1');
+    return t;
+  }
+  const vowelless = t => t.replace(/[aeiou]/g, 'a').replace(/(.)\1+/g,'$1');
+  const PARTn = [...new Set(PART.map(norm))].filter(w => w.length >= 3);
+  const WORDn = new Set(WORD.map(norm));
+  const ALLOWn = new Set(ALLOW.map(norm));
+  // Sound-alike check with any vowels: feck, fack, fook -> fuck; shat, shyt -> shit
+  const STRONG = new Set(['fuck','shit','bitch','cunt','dick','cock','piss','slut','twat','whore','tits'].map(t => vowelless(norm(t))));
+  function blockedPiece(raw) {
+    const n = norm(raw);
+    if (!n || ALLOWn.has(n)) return false;
+    if (WORDn.has(n) || STRONG.has(vowelless(n))) return true;
+    return PARTn.some(w => n.includes(w));
+  }
+  return {
+    // true if the first name, the last initial, or the two together look inappropriate
+    isBlocked(first, initial) {
+      const words = String(first || '').split(/[\s\-']+/).filter(Boolean);
+      if (blockedPiece(first) || words.some(blockedPiece)) return true;
+      // Also check the name run together with the initial ("Fu" + "K"),
+      // unless the name itself is on the allow list
+      const last = words[words.length - 1] || '';
+      if (ALLOWn.has(norm(last)) || ALLOWn.has(norm(first))) return false;
+      return blockedPiece(String(first || '') + String(initial || '')) ||
+             blockedPiece(last + String(initial || ''));
+    }
+  };
+})();
+
+/* ═══════════ LEADERBOARD NAME ═══════════ */
+// Keeps letters (any language), spaces, hyphens and apostrophes; capitalises the first letter.
+function cleanFirstName(v) {
+  const t = (v || '').replace(/[^\p{L}' -]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 20);
+  return t ? t.charAt(0).toUpperCase() + t.slice(1) : '';
+}
+function cleanInitial(v) {
+  const m = (v || '').match(/\p{L}/u);
+  return m ? m[0].toUpperCase() : '';
+}
+window._getPlayerName = () => { try { return localStorage.getItem('ahh_name') || ''; } catch(e) { return ''; } };
+window._getPlayerPlace = () => {
+  try { const p = JSON.parse(localStorage.getItem('ahh_place') || 'null'); return p ? { city: p.city, state: p.state } : {}; }
+  catch(e) { return {}; }
+};
+// Letters, spaces, periods, hyphens and apostrophes; each word capitalised ("san gabriel" -> "San Gabriel")
+function cleanCity(v) {
+  return (v || '').replace(/[^\p{L}.' -]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 30)
+    .replace(/(^|[\s-])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
+}
+
+function showNameForm(show) {
+  const form = document.getElementById('lb-form');
+  const cont = document.getElementById('modal-continue');
+  const saved = window._getPlayerName();
+  form.hidden = !show || !!saved;
+  cont.textContent = (show && !saved) ? 'Skip for now' : (show ? 'View leaderboard →' : 'Continue Hunt →');
+  cont.classList.toggle('secondary', show && !saved);
+  document.getElementById('lb-save').disabled = false;
+  document.getElementById('lb-save').textContent = 'Save to leaderboard';
+}
+
+async function submitLeaderboardName() {
+  const rawFirst = document.getElementById('lb-first').value;
+  const rawInit  = document.getElementById('lb-last').value;
+  const first = cleanFirstName(rawFirst);
+  const init  = cleanInitial(rawInit);
+  if (!first || !init) { toast('Please enter your first name and last initial'); return; }
+  if (NAME_FILTER.isBlocked(rawFirst, rawInit) || NAME_FILTER.isBlocked(first, init)) {
+    const f = document.getElementById('lb-first');
+    f.value = ''; f.focus();
+    toast('Please use your real first name — that one can\'t be shown publicly');
+    return;
+  }
+  const rawCity = document.getElementById('lb-city').value;
+  const city  = cleanCity(rawCity);
+  const state = document.getElementById('lb-state').value;
+  if (!city) { toast('Please enter your city'); document.getElementById('lb-city').focus(); return; }
+  if (NAME_FILTER.isBlocked(rawCity, '') || NAME_FILTER.isBlocked(city, '')) {
+    const c = document.getElementById('lb-city');
+    c.value = ''; c.focus();
+    toast('Please enter the city you live in');
+    return;
+  }
+  const name = `${first} ${init}.`;
+  try { localStorage.setItem('ahh_name', name); localStorage.setItem('ahh_place', JSON.stringify({ city, state })); } catch(e) {}
+  const btn = document.getElementById('lb-save');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const ok = window._saveLeaderboardName ? await window._saveLeaderboardName(name, city, state) : false;
+  document.getElementById('modal').classList.remove('show');
+  toast(ok ? `Saved as ${name}` : 'Name saved — leaderboard updates when online');
+  buildHome(); buildMap(); buildProgress();
+  goScreen('leaderboard');
+}
+
+function escapeHtml(v) {
+  return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 /* ═══════════ MODAL ═══════════ */
 function closeModal() {
+  const finished = !document.getElementById('lb-form').hidden || document.getElementById('modal-continue').textContent.startsWith('View');
   document.getElementById('modal').classList.remove('show');
   buildHome();
   buildMap();
   buildProgress();
-  goScreen('map');
+  goScreen(finished ? 'leaderboard' : 'map');
 }
 
 /* ═══════════ MAP ═══════════ */
@@ -2100,7 +2356,7 @@ function buildMap() {
     btn.innerHTML = `
       <div class="leg-dot" style="background:${dotCol};width:12px;height:12px;" aria-hidden="true"></div>
       <div>
-        <div class="map-row-name">${s.n}. ${s.name}</div>
+        <div class="map-row-name">${s.finish ? '🏁 ' : s.n + '. '}${s.name}</div>
         <div class="map-row-sub">${s.addr}</div>
       </div>
       <div class="map-status" style="color:${isDone?'#4A7A5A':isNext?'#C4922A':'#B0A088'}">
@@ -2112,15 +2368,27 @@ function buildMap() {
 }
 
 /* ═══════════ PROGRESS ═══════════ */
+// The hunt has 9 landmarks. The return to the Gilb Museum is the "Finish",
+// not a numbered stop, so it is left out of the landmark count.
+function landmarkProgress() {
+  const landmarks = STOPS.filter(s => !s.finish);
+  const finishStop = STOPS.find(s => s.finish);
+  return {
+    total: landmarks.length,
+    cnt: landmarks.filter(s => done.has(s.id)).length,
+    finished: finishStop ? done.has(finishStop.id) : false,
+  };
+}
+
 function buildProgress() {
-  const total = STOPS.length;
-  const cnt   = Math.min(done.size, total);
+  const { total, cnt, finished } = landmarkProgress();
   const pct   = Math.round((cnt/total)*100);
   const circ  = 2 * Math.PI * 60;
 
-  document.getElementById('prog-sub').textContent   = `${cnt} of ${total} stops completed`;
+  document.getElementById('prog-sub').textContent   = finished ? 'Hunt complete!' : `${cnt} of ${total} landmarks visited`;
   document.getElementById('ring-pct').textContent   = pct + '%';
-  document.getElementById('ring-lbl').textContent   = `${cnt} of ${total} stops done`;
+  document.getElementById('ring-lbl').textContent   = finished ? 'Hunt complete!'
+    : cnt === total ? 'Return to the Gilb Museum to finish' : `${cnt} of ${total} landmarks`;
   document.getElementById('prog-arc').style.strokeDashoffset = circ - (circ * pct / 100);
 
   const el = document.getElementById('prog-list');
@@ -2171,8 +2439,11 @@ window._renderLeaderboard = (rows, myUserId) => {
   }
   const medals = ['🥇','🥈','🥉'];
   el.innerHTML = rows.map((r, i) => {
-    const mins = Math.floor((r.elapsedSecs||0) / 60);
-    const secs = String((r.elapsedSecs||0) % 60).padStart(2,'0');
+    const t    = r.elapsedSecs || 0;
+    const hrs  = Math.floor(t / 3600);
+    const mm   = Math.floor((t % 3600) / 60);
+    const ss   = String(t % 60).padStart(2,'0');
+    const timeStr = hrs ? `${hrs}:${String(mm).padStart(2,'0')}:${ss}` : `${mm}:${ss}`;
     const isMe = r.id === myUserId;
     return `
       <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;
@@ -2181,13 +2452,13 @@ window._renderLeaderboard = (rows, myUserId) => {
         border-radius:var(--r-sm);margin-bottom:8px;">
         <div style="font-size:22px;flex-shrink:0">${medals[i] || `#${i+1}`}</div>
         <div style="flex:1">
-          <div style="font-size:14px;font-weight:600;color:var(--ink)">${r.displayName || 'Explorer'}${isMe ? ' (you)' : ''}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink)">${escapeHtml(r.displayName || 'Explorer')}${isMe ? ' (you)' : ''}</div>
           <div style="font-size:11px;color:var(--ink-lt);margin-top:2px;">
-            ${r.completedAt?.toDate ? r.completedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'Recently'}
+            ${r.city ? escapeHtml(r.city) + ', ' + escapeHtml(r.state === 'Intl' ? 'Intl' : (r.state || '')) + ' · ' : ''}Completed ${r.completedAt?.toDate ? r.completedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'recently'}
           </div>
         </div>
         <div style="text-align:right;flex-shrink:0">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--forest)">${mins}:${secs}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--forest)">${timeStr}</div>
           <div style="font-size:10px;color:var(--ink-lt);">total time</div>
         </div>
       </div>`;
@@ -2242,7 +2513,7 @@ window._renderAdminStats = (users) => {
     return `
       <div style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
-          <span style="color:var(--ink);font-weight:500;">${s.n}. ${s.name}</span>
+          <span style="color:var(--ink);font-weight:500;">${s.finish ? '🏁 ' : s.n + '. '}${s.name}</span>
           <span style="color:var(--ink-lt)">${stopCounts[s.id]||0} / ${total}</span>
         </div>
         <div style="height:6px;background:var(--cream-dk);border-radius:99px;overflow:hidden;">
@@ -2282,7 +2553,8 @@ function confirmReset() {
 function doReset() {
   done.clear();
   window._done = done;
-  try { localStorage.removeItem('ahh_done'); } catch(e){}
+  try { localStorage.removeItem('ahh_done'); localStorage.removeItem('ahh_name'); localStorage.removeItem('ahh_place'); } catch(e){}
+  if (window._resetFirestoreProgress) window._resetFirestoreProgress();
   document.getElementById('reset-modal')?.classList.remove('show');
   buildHome();
   buildMap();
