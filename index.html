@@ -807,10 +807,14 @@ body {
 
 .museum-card {
   background: var(--cream-md);
-  border-radius: var(--r); padding: 18px;
+  border-radius: var(--r); padding: 16px;
   border: 1px solid var(--cream-dk);
   margin: 20px 0;
+  /* Logo on the left, museum details on the right */
+  display: flex; align-items: flex-start; gap: 14px;
 }
+.museum-info { flex: 1; min-width: 0; }
+.museum-info .museum-detail { line-height: 1.55; }
 .museum-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 18px; font-weight: 600; color: var(--forest);
@@ -829,7 +833,7 @@ body {
   border-radius: 8px; padding: 5px; box-sizing: content-box;
 }
 .museum-logo {
-  display: block; width: 88px; height: auto; margin-bottom: 12px;
+  display: block; width: 72px; height: auto; flex-shrink: 0;
   background: #fff; border-radius: 10px; padding: 6px; box-sizing: content-box;
   box-shadow: 0 1px 3px rgba(15,31,15,0.12);
 }
@@ -1414,13 +1418,16 @@ body {
       
       <div class="about-section-title">Our beneficiary</div>
       <div class="museum-card">
-        <img class="museum-logo" src="gilb_logo.jpg" alt="The Gilb Museum of Arcadia Heritage logo" width="88" height="119" onerror="this.style.display='none'">
-        <div class="museum-name">Gilb Museum of Arcadia Heritage</div>
-        <div class="museum-detail">
-          380 W Huntington Dr, Arcadia CA 91007<br>
-          Tues–Sat: 10:00 am – 4:00 pm (closed 12–1 pm)<br>
-          (626) 574-5440 · Free admission<br>
-          <a href="https://www.arcadiaca.gov/government/library/gilb_museum/index.php" target="_new"> Gilb Museum Website</a>
+        <img class="museum-logo" src="gilb_logo.jpg" alt="The Gilb Museum of Arcadia Heritage logo" width="72" height="97" onerror="this.style.display='none'">
+        <div class="museum-info">
+          <div class="museum-name">Gilb Museum of Arcadia Heritage</div>
+          <div class="museum-detail">
+            380 W Huntington Dr<br>
+            Arcadia, CA 91007<br>
+            Tues–Sat: 10:00 am – 4:00 pm (closed 12–1 pm)<br>
+            (626) 574-5440 · Free admission<br>
+            <a href="https://www.arcadiaca.gov/government/library/gilb_museum/index.php" target="_new"> Gilb Museum Website</a>
+          </div>
         </div>
       </div>
       <p class="about-p">The Gilb Museum of Arcadia Heritage has preserved and celebrated the city's story since 2001. This project was created in partnership with the museum to expand their educational outreach and bring Arcadia's history to life in a new, interactive format.</p>
