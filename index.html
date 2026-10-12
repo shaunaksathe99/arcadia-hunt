@@ -869,11 +869,11 @@ body {
   flex: 1; padding: 10px 4px 13px;
   display: flex; flex-direction: column; align-items: center; gap: 4px;
   cursor: pointer; background: none; border: none;
-  font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 500;
-  color: rgba(248,244,236,0.3); letter-spacing: 0.4px;
+  font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 600;
+  color: rgba(248,244,236,0.75); letter-spacing: 0.4px;
   transition: color 0.15s;
 }
-.nb.active { color: var(--gold); }
+.nb.active { color: var(--gold); box-shadow: inset 0 -3px 0 var(--gold); }
 .nb svg { width: 21px; height: 21px; }
 
 /* ═══════════════ UNLOCK MODAL ═══════════════ */
@@ -1749,8 +1749,8 @@ function goScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('scr-' + name).classList.add('active');
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
-  const map = {home:'nb-home', map:'nb-map', progress:'nb-prog', about:'nb-about', leaderboard:'nb-board'};
-  if (map[name]) document.getElementById(map[name])?.classList.add('active');
+  // Highlight the matching tab in every screen's menu (each screen has its own copy)
+  document.querySelectorAll(`.nb[onclick="goScreen('${name}')"]`).forEach(b => b.classList.add('active'));
   if (name === 'home')        buildHome();
   if (name === 'map')         buildMap();
   if (name === 'progress')    buildProgress();
